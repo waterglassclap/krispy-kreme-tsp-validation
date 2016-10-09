@@ -32,7 +32,7 @@ class TSPFetcher(object):
 
         self.list_item_pattern = re.compile(r"<big>([a-zA-Z\-\_]*)([0-9]*) : (\d+)</big></li>")
 
-        self.outdir_root = os.path.abspath('datas')
+        self.outdir_root = os.path.abspath('../../datas')
         self.outdir_raws = os.path.join(self.outdir_root, 'raws')
         self.outdir_tsp_full = os.path.join(self.outdir_root, 'tsp-full')
  

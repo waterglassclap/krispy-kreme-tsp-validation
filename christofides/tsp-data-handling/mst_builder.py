@@ -19,7 +19,7 @@ def makedir_safe(path):
 class MSTBuilder(object):
     """ mst builder for build mst using fully-connected graph infos """
     def __init__(self):
-        self.outdir_root = os.path.abspath('datas')
+        self.outdir_root = os.path.abspath('../../datas')
         self.outdir_tsp_full = os.path.join(self.outdir_root, 'tsp-full')
         self.outdir_tsp_mst = os.path.join(self.outdir_root, 'tsp-mst')
  
