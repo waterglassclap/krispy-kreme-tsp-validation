@@ -1,0 +1,3 @@
+USAGE :
+python tsp_fetcher.py
+python mst_builder.py
