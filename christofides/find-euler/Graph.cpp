@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <string.h>
 #include "Graph.h"
 
 Graph::Graph(int V) {
