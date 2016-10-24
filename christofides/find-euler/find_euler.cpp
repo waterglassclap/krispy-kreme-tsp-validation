@@ -101,11 +101,10 @@ void skip_second(list<int> *euler_path, int num_node_of_full){
     cout << "'skip_second'"<<endl;
     vector<bool> visited(num_node_of_full, false);
     list<int>::iterator iter = euler_path->begin();
-    list<int>::iterator iter_end = prev(euler_path->end());
     while(iter!=euler_path->end()){
         if(visited[*iter]){
             iter = euler_path->erase(iter);
-        }else if(*iter==END && iter!=iter_end){
+        }else if(*iter==END && iter!=prev(euler_path->end())){
             iter = euler_path->erase(iter);
         }else{
             visited[*iter] = true;
@@ -118,6 +117,38 @@ void skip_second(list<int> *euler_path, int num_node_of_full){
 
 void greedy(list<int> *euler_path, int num_node_of_full){
     cout << "'greedy'"<<endl;
+    vector< list<int>::iterator > visited(num_node_of_full, euler_path->end());
+    list<int>::iterator iter = euler_path->begin();
+    while(iter!=euler_path->end()){
+        if(visited[*iter] != euler_path->end() && visited[*iter] != euler_path->begin() ){
+            int cost_prev = 0, cost_curr = 0;
+            list<int>::iterator prev_iter = visited[*iter];
+            cost_curr+=full_weight_matrix[*prev(iter)][*iter];
+            cost_curr+=full_weight_matrix[*iter][*next(iter)];
+            cost_curr-=full_weight_matrix[*prev(iter)][*next(iter)];
+
+            cost_prev+=full_weight_matrix[*prev(prev_iter)][*prev_iter];
+            cost_prev+=full_weight_matrix[*prev_iter][*next(prev_iter)];
+            cost_prev-=full_weight_matrix[*prev(prev_iter)][*next(prev_iter)];
+
+            if(cost_curr > cost_prev){
+                iter = euler_path->erase(iter);
+            }else{
+                visited[*iter] = iter;
+                euler_path->erase(prev_iter);
+                iter++;
+            }
+        }else if(*iter==END && iter!=prev(euler_path->end())){
+            iter = euler_path->erase(iter);
+        }else if(*iter==START && iter!=euler_path->begin()){
+            iter = euler_path->erase(iter);
+        }else{
+            visited[*iter] = iter;
+            iter++;
+        }
+    }
+    visited.clear();
+    visited.shrink_to_fit();
 }
 
 /*

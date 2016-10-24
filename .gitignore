@@ -1,5 +1,5 @@
 datas/
 list.json
 *.pyc
-CMakeLists.txt
 a.out
+*.o
