@@ -12,6 +12,7 @@ private:
     int V;
     list<int> *adj;
 public:
+    list<int> *euler_path;
     Graph(int V);
     void addEdge(int u, int v);
     void rmvEdge(int u, int v);

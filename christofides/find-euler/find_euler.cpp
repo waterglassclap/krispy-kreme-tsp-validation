@@ -1,12 +1,19 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <map>
+#include <list>
 #include "Graph/Graph.h"
 #include "Blossom/PerfectMatching.h"
 
 using namespace std;
+typedef void(*pt2func)(list<int> *euler_path);
 
 // functions
+pt2func set_comm_arg(int n, char* arg[]);
+void skip_second(list<int> *euler_path);
+void greedy(list<int> *euler_path);
+int total_cost(list<int> *euler_path);
 Graph* get_mst_edges_and_combine_graph_mst(int& num_node_of_full, vector<bool>& count);
 void get_weight_info(int num_node_of_full);
 PerfectMatching* blossom_v(int& num_odd_node, PerfectMatching::Options options, vector<int>& odd_node_list, int num_node_of_full, vector<bool>& count);
@@ -41,28 +48,63 @@ int main(int argc, char* argv[]){
 
     PerfectMatching* pm = blossom_v(num_odd_node, options, odd_node_list, num_node_of_full, count);
     combine_graph_blossom_v(*combined_graph, pm, num_odd_node, odd_node_list);
+    count.clear(); //free memory
+    count.shrink_to_fit();
+    odd_node_list.clear();
+    odd_node_list.shrink_to_fit();
     delete pm;
 
-    // Find Euler Path
+    // Find an Euler Path
+    list<int> *euler_path = new list<int>;
+    list<int>::iterator iter;
+    combined_graph->euler_path = euler_path;
     ofstream out_file_euler(OUTPUT_FILE_EULER);
     combined_graph->printEulerTour(out_file_euler);
     out_file_euler.close();
     delete combined_graph;
 
+    pt2func short_cutting_func = set_comm_arg(argc, argv);
+    cout <<"INFO: short cutting by ";
+    short_cutting_func(euler_path);
+    int final_cost = total_cost(euler_path);
+    cout << "INFO: total cost of s-t path TSP is "<<final_cost<<endl;
 
+    delete euler_path;
     for(int i=0;i<num_node_of_full;i++){
         delete[] full_weight_matrix[i];
     }
     delete full_weight_matrix;
 
-
-    cout <<"INFO: done" <<endl;
     return 0;
 }
 
 
 
 
+
+pt2func set_comm_arg(int n, char* arg[]){
+    map<string, int> comm={
+            {"skip_second",0},
+            {"greedy", 1}
+    };
+    switch (comm[arg[1]]){
+        case 0:
+            return &skip_second;
+        case 1:
+            return &greedy;
+        default:
+            cout<<"ERR: unknown command line argument"<<endl;
+            throw 1;
+    }
+}
+
+void skip_second(list<int> *euler_path){
+    cout << "'skip_second'"<<endl;
+}
+
+void greedy(list<int> *euler_path){
+    cout << "'greedy'"<<endl;
+}
 
 /*
  * count degree of each node and save it in 'count'
@@ -90,7 +132,6 @@ Graph* get_mst_edges_and_combine_graph_mst(int& num_node_of_full, vector<bool>& 
     }
     in_file_mst.close();
 
-    cout << "INFO: tsp-mst file is closed" << endl;
     return combined_graph;
 }
 
@@ -116,10 +157,10 @@ void get_weight_info(int num_node_of_full){
 
     while(in_file_full >> temp1 >> temp2 >> temp3) {
         full_weight_matrix[temp1][temp2] = temp3;
+        full_weight_matrix[temp2][temp1] = temp3;
     }
     in_file_full.close();
 
-    cout << "INFO: tsp-full file is closed" << endl;
 }
 
 /*
@@ -161,8 +202,8 @@ PerfectMatching* blossom_v(int& num_odd_node, PerfectMatching::Options options,
     for (e=0; e<num_edge_of_odd; e++) pm->AddEdge(edges[2*e], edges[2*e+1], weights[e]);
     pm->options = options;
     pm->Solve();
-    double cost = ComputePerfectMatchingCost(num_odd_node, num_edge_of_odd, edges, weights, pm);
-    printf("INFO: cost = %.1f\n", cost);
+    int perfect_match_cost = ComputePerfectMatchingCost(num_odd_node, num_edge_of_odd, edges, weights, pm);
+    cout <<"INFO: perfect matching cost = " <<perfect_match_cost<<endl;
 
     delete [] edges;
     delete [] weights;
@@ -178,4 +219,22 @@ void combine_graph_blossom_v(Graph &combined_graph, PerfectMatching* &pm, int nu
         if(i<j)
             combined_graph.addEdge(odd_node_list[i], odd_node_list[j]);
     }
+}
+
+/*
+ * return: cost of given s-t path TSP
+ */
+int total_cost(list<int> *euler_path){
+    int cost=0;
+    list<int>::iterator iter = euler_path->begin(), iter_last = prev(euler_path->end());
+    if(euler_path->empty()){
+        cout << "WARN: euler path is empty"<<endl;
+        return 0;
+    }
+    while(true){
+        cost+=full_weight_matrix[*iter][*next(iter)];
+        iter++;
+        if(iter == iter_last) break;
+    }
+    return cost;
 }

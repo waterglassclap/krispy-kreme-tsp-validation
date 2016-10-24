@@ -31,6 +31,7 @@ void Graph::printEulerTour(ofstream &outstream) {
             break;
         }
 
+    euler_path->push_back(u);
     // Print tour starting from oddv
     printEulerUtil(u, outstream);
     outstream << endl;
@@ -45,6 +46,7 @@ void Graph::printEulerUtil(int u, ofstream &outstream) {
 
         // If edge u-v is not removed and it's a a valid next edge
         if (v != -1 && isValidNextEdge(u, v)) {
+            euler_path->push_back(v);
             outstream << u << " " << v << "\n";
             rmvEdge(u, v);
             printEulerUtil(v, outstream);
