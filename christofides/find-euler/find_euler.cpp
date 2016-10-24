@@ -7,12 +7,12 @@
 #include "Blossom/PerfectMatching.h"
 
 using namespace std;
-typedef void(*pt2func)(list<int> *euler_path);
+typedef void(*pt2func)(list<int> *euler_path, int num_node_of_full);
 
 // functions
 pt2func set_comm_arg(int n, char* arg[]);
-void skip_second(list<int> *euler_path);
-void greedy(list<int> *euler_path);
+void skip_second(list<int> *euler_path, int num_node_of_full);
+void greedy(list<int> *euler_path, int num_node_of_full);
 int total_cost(list<int> *euler_path);
 Graph* get_mst_edges_and_combine_graph_mst(int& num_node_of_full, vector<bool>& count);
 void get_weight_info(int num_node_of_full);
@@ -56,7 +56,6 @@ int main(int argc, char* argv[]){
 
     // Find an Euler Path
     list<int> *euler_path = new list<int>;
-    list<int>::iterator iter;
     combined_graph->euler_path = euler_path;
     ofstream out_file_euler(OUTPUT_FILE_EULER);
     combined_graph->printEulerTour(out_file_euler);
@@ -65,7 +64,7 @@ int main(int argc, char* argv[]){
 
     pt2func short_cutting_func = set_comm_arg(argc, argv);
     cout <<"INFO: short cutting by ";
-    short_cutting_func(euler_path);
+    short_cutting_func(euler_path, num_node_of_full);
     int final_cost = total_cost(euler_path);
     cout << "INFO: total cost of s-t path TSP is "<<final_cost<<endl;
 
@@ -98,11 +97,26 @@ pt2func set_comm_arg(int n, char* arg[]){
     }
 }
 
-void skip_second(list<int> *euler_path){
+void skip_second(list<int> *euler_path, int num_node_of_full){
     cout << "'skip_second'"<<endl;
+    vector<bool> visited(num_node_of_full, false);
+    list<int>::iterator iter = euler_path->begin();
+    list<int>::iterator iter_end = prev(euler_path->end());
+    while(iter!=euler_path->end()){
+        if(visited[*iter]){
+            iter = euler_path->erase(iter);
+        }else if(*iter==END && iter!=iter_end){
+            iter = euler_path->erase(iter);
+        }else{
+            visited[*iter] = true;
+            iter++;
+        }
+    }
+    visited.clear();
+    visited.shrink_to_fit();
 }
 
-void greedy(list<int> *euler_path){
+void greedy(list<int> *euler_path, int num_node_of_full){
     cout << "'greedy'"<<endl;
 }
 
