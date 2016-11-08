@@ -184,27 +184,24 @@ MinCutInfo PushRelabel::getMinCutInfo() {
 
 	// height 별로 봐서 빈 하이트가 있으면, 그거 기준으로 위 아래 그래프 자르고 그 사이에 있는 edge들을 리턴함
 	// get no presence height
-	bool* height_presence = new bool[nodeNumber];
-	int no_presence_height = -1;
-
-	for (int i = 0; i < nodeNumber; i++) {
-		height_presence[height[i]] = true;
-	}
-	for (int i = 0; i < nodeNumber; i++) {
-		if(!height_presence[i]) {
-			no_presence_height = i;
+	int noPresenceHeight = -1;
+	int maxHeight = *max_element(height, height + nodeNumber);
+	for(int i = 0 ; i < maxHeight; i++) {
+		// if given height not exists
+		if (find(height, height + nodeNumber, i) == height + nodeNumber) {
+			noPresenceHeight = i;
 			break;
 		}
 	}
 
-	if (no_presence_height < 0) {
+	if (noPresenceHeight < 0) {
 		throw runtime_error("there is no height that no nodes included. terminate.");
 	}
 
 	// get min cut info
 	for (int i = 0; i < nodeNumber; i++) {
 		for (int j = 0; j < nodeNumber; j++) {
-			if (height[i] > no_presence_height && height[j] < no_presence_height
+			if (height[i] > noPresenceHeight && height[j] < noPresenceHeight
 			    && height[i] > height[j] && cMatrix[i][j] > 0.0f) {
 				minCutInfo.edgeInfos[minCutInfo.size].source = i;
 				minCutInfo.edgeInfos[minCutInfo.size].sink = j;

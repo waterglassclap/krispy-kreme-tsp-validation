@@ -6,6 +6,7 @@
 
 #include <climits>
 #include <float.h>
+#include <algorithm>
 
 using std::deque;
 
