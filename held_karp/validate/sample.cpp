@@ -1,6 +1,6 @@
 
 #include <math.h>
-#include "../../utils/common.h"
+#include "../../utils/common_util.h"
 #include "../../utils/push_relabel.h"
 
 using namespace std;

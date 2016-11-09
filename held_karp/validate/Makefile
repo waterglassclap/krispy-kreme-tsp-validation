@@ -10,7 +10,7 @@ UTIL_DIR = ../../utils
 
 OBJS = sample.o
 
-SOURCES = $(UTIL_DIR)/common.cpp $(UTIL_DIR)/push_relabel.cpp sample.cpp
+SOURCES = $(UTIL_DIR)/common_util.cpp $(UTIL_DIR)/push_relabel.cpp sample.cpp
 
 all: sample
 
