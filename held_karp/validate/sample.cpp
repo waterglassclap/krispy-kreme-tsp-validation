@@ -1,7 +1,7 @@
 
 #include <math.h>
-#include "utils.h"
-#include "push_relabel.h"
+#include "../../utils/common.h"
+#include "../../utils/push_relabel.h"
 
 using namespace std;
 

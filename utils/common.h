@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef COMMON_H
+#define COMMON_H
 
 const float ERROR_TOLERANCE = 1e-9;
 
