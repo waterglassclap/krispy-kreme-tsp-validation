@@ -8,17 +8,10 @@
 #include <float.h>
 #include <algorithm>
 
-using std::deque;
+#include "../common_ds/edge_info.h"
+#include "common_util.h"
 
-using std::cin;
-using std::cout;
-using std::endl;
-
-typedef struct EdgeInfo {
-	int source;
-	int sink;
-	float weight;
-} EdgeInfo;
+using namespace std;
 
 typedef struct MinCutInfo {
 	struct EdgeInfo* edgeInfos;

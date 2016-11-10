@@ -3,17 +3,17 @@ CC = g++
 CFLAGS = -g -ansi -pedantic-errors -Wall
 LDFLAGS = -lpthread -lm
 
-UTIL_DIR = ../../utils
+UTIL_DIR = ../utils
 
-OBJS = randomized.o
+OBJS = sample.o
 
-SOURCES = $(UTIL_DIR)/common_util.cpp $(UTIL_DIR)/push_relabel.cpp abs_ppr.cpp randomized_ppr.cpp
+SOURCES = $(UTIL_DIR)/common_util.cpp $(UTIL_DIR)/push_relabel.cpp abs_ppr.cpp randomized_ppr.cpp sample.cpp
 
-all: randomized
+all: sample
 
-randomized: $(OBJS)
+sample: $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(SOURCES)
 
 clean:
-	rm -rf $(OBJS) randomized
+	rm -rf $(OBJS) sample sample.dSYM
 

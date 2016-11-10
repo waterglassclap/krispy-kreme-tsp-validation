@@ -18,5 +18,5 @@ sample: $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(SOURCES)
 
 clean:
-	rm -rf $(OBJS) sample
+	rm -rf $(OBJS) sample sample.dSYM
 
