@@ -30,6 +30,7 @@ struct ErrorInfo getStErrorInfo(int s, int t, int n, float** inputGraph) {
 	return errorInfo;
 }
 
+
 struct ErrorInfos getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
 	ErrorInfos errorInfos;
 	errorInfos.infos = new ErrorInfo[n];
@@ -43,7 +44,7 @@ struct ErrorInfos getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
 
     for (int i = 0; i < n - 1; i++) {
     	if (i != s) {
-    		PushRelabel verifier(s, i, n - 1, mergedGraph);
+    		PushRelabel verifier(0, i, n - 1, mergedGraph);
     		MinCutInfo mci = verifier.getMinCutInfo();
 			if (!over(mci.totalFlow, 2.0f)) {
 				errorInfos.infos[errorInfos.num].minCutInfo = mci;
@@ -52,6 +53,7 @@ struct ErrorInfos getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
 			}
     	}
     }
+    // TODO : free mergedGraph
     return errorInfos;
 }
 

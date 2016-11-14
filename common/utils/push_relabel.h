@@ -1,8 +1,8 @@
 #ifndef PUSH_RELABEL_H
 #define PUSH_RELABEL_H
 
-#include<iostream>
-#include<deque>
+#include <iostream>
+#include <deque>
 
 #include <climits>
 #include <float.h>

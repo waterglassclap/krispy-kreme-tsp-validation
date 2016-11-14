@@ -10,6 +10,7 @@
 #include <algorithm>
 
 #include "../common/model/edge_info.h"
+#include "../common/utils/common_util.h"
 #include "../common/utils/push_relabel.h"
 #include "ppr_ds.h"
 

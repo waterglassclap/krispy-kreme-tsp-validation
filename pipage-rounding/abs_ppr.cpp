@@ -50,9 +50,22 @@ EdgeInfo* AbsPpr::pullEdge(PprAns* ans) {
 	return edge;
 }
 
+// TODO : What if edge has common node?
 PprAns* AbsPpr::hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
 	PprAns* newAns = new PprAns;
-	
+
+	// TODO : calculate 
+	// TODO : free
+	float** iMergedGraph = getMergedGraph(i->source, i->sink, prevAns->n, prevAns->sol);
+	float** mergedGraph = getMergedGraph(i->source, i->sink, prevAns->n, prevAns->sol);
+	int newSource = j->source;
+	int newSink = j->sink;
+	int newN = n - 1;
+	mergedGraph = getMergedGraph(j->source, i->sink, prevAns->n, mergedGraph);
+
+	PushRelabel verifier(s, t, n, inputGraph);
+	MinCutInfo mci = verifier.getMinCutInfo();
+
 	// TODO
     return newAns;
 }

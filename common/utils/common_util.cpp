@@ -17,18 +17,18 @@ float** getMergedGraph(int s, int t, int n, float** inputGraph) {
 		mergedGraph[i] = new float[n - 1];
 	}
 
-	int newRow = 0;
+	int newRow = 1;
 	for (int originalRow = 0; originalRow < n; originalRow++) {
-		int newCol = 0, currentRow, currentCol;
-		if (originalRow == t) {
-			currentRow = s;
+		int newCol = 1, currentRow, currentCol;
+		if (originalRow == s || originalRow == t) {
+			currentRow = 0;
 		} else {
 			currentRow = newRow;
 			newRow++;
 		}
 		for (int originalCol = 0; originalCol < n; originalCol++) {
-			if (originalCol == t) {
-				currentCol = s;
+			if (originalCol == s || originalCol == t) {
+				currentCol = 0;
 			} else {
 				currentCol = newCol;
 				newCol++;
