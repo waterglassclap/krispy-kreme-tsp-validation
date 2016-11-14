@@ -6,7 +6,7 @@ CC = g++
 CFLAGS = -g -ansi -pedantic-errors -Wall
 LDFLAGS = -lpthread -lm
 
-UTIL_DIR = ../../utils
+UTIL_DIR = ../../common/utils
 
 OBJS = sample.o
 

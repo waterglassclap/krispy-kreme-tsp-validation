@@ -7,10 +7,12 @@
 using namespace std;
 
 class RandomizedPpr : public AbsPpr {
+private:
+	float getSolDiffSize(PprAns* first, PprAns* second);
 public:
-	RandomizedPpr(struct ConstrSet bM, struct FracSol bS) : AbsPpr(bM, bS) {};
-	virtual pair<struct FracSol, struct ConstrSet> getNewFsCsPair(pair<struct FracSol, struct ConstrSet> aFsCsPair,
-                                                                  pair<struct FracSol, struct ConstrSet> bFsCsPair);
+	RandomizedPpr() : AbsPpr() {};
+    virtual void updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns);
 };
+
 
 #endif
