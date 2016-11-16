@@ -2,7 +2,10 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <set>
 #include <list>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 #include "Graph/Graph.h"
 #include "Blossom/PerfectMatching.h"
 
@@ -11,8 +14,11 @@ typedef void(*pt2func)(list<int> *euler_path, int num_node_of_full);
 
 // functions
 pt2func set_comm_arg(int n, char* arg[]);
-void skip_second(list<int> *euler_path, int num_node_of_full);
+void take_first(list<int> *euler_path, int num_node_of_full);
+void take_second(list<int> *euler_path, int num_node_of_full);
+void take_random(list<int> *euler_path, int num_node_of_full);
 void greedy(list<int> *euler_path, int num_node_of_full);
+void greedy2(list<int> *euler_path, int num_node_of_full);
 int total_cost(list<int> *euler_path);
 Graph* get_mst_edges_and_combine_graph_mst(int& num_node_of_full, vector<bool>& count);
 void get_weight_info(int num_node_of_full);
@@ -68,6 +74,14 @@ int main(int argc, char* argv[]){
     int final_cost = total_cost(euler_path);
     cout << "INFO: total cost of s-t path TSP is "<<final_cost<<endl;
 
+    //test short cutting
+    set<int> test_set(euler_path->begin(), euler_path->end());
+    cout <<"total: "<< num_node_of_full <<endl
+         <<"list: "<<euler_path->size()<<endl
+         <<"set: "<<test_set.size()<<endl;
+    cout <<"start: "<<*euler_path->begin()<<" end: "<<*prev(euler_path->end())<<endl;
+    cout << "it should be (total=list=set) or short cutting has an error"<<endl;
+
     delete euler_path;
     for(int i=0;i<num_node_of_full;i++){
         delete[] full_weight_matrix[i];
@@ -83,22 +97,31 @@ int main(int argc, char* argv[]){
 
 pt2func set_comm_arg(int n, char* arg[]){
     map<string, int> comm={
-            {"skip_second",0},
-            {"greedy", 1}
+            {"take_first",0},
+            {"greedy", 1},
+            {"take_second", 2},
+            {"greedy2", 3},
+            {"take_random", 4}
     };
     switch (comm[arg[1]]){
         case 0:
-            return &skip_second;
+            return &take_first;
         case 1:
             return &greedy;
+        case 2:
+            return &take_second;
+        case 3:
+            return &greedy2;
+        case 4:
+            return &take_random;
         default:
             cout<<"ERR: unknown command line argument"<<endl;
             throw 1;
     }
 }
 
-void skip_second(list<int> *euler_path, int num_node_of_full){
-    cout << "'skip_second'"<<endl;
+void take_first(list<int> *euler_path, int num_node_of_full){
+    cout << "'take_first'"<<endl;
     vector<bool> visited(num_node_of_full, false);
     list<int>::iterator iter = euler_path->begin();
     while(iter!=euler_path->end()){
@@ -114,6 +137,177 @@ void skip_second(list<int> *euler_path, int num_node_of_full){
     visited.clear();
     visited.shrink_to_fit();
 }
+
+void take_second(list<int> *euler_path, int num_node_of_full){
+    cout << "'take_second'"<<endl;
+    vector< list<int>::iterator > visited(num_node_of_full, euler_path->end());
+    list<int>::iterator iter = euler_path->begin();
+    while(iter!=euler_path->end()){
+        if(visited[*iter] != euler_path->end()){
+            if(*iter==START){
+                iter = euler_path->erase(iter);
+            }else{
+                euler_path->erase(visited[*iter]);
+                visited[*iter] = iter;
+                iter++;
+            }
+        }else{
+            visited[*iter] = iter;
+            iter++;
+        }
+    }
+    visited.clear();
+    visited.shrink_to_fit();
+}
+
+
+void take_random(list<int> *euler_path, int num_node_of_full){
+    cout << "'take_random'"<<endl;
+    srand (time(NULL));
+    vector< list<int>::iterator > visited(num_node_of_full, euler_path->end());
+    list<int>::iterator iter = euler_path->begin();
+
+    while(iter!=prev(euler_path->end())){
+        if(*iter==END){
+            iter = euler_path->erase(iter);
+        }else if(visited[*iter] != euler_path->end()){ // second visit
+            if(*iter==START) {
+                iter = euler_path->erase(iter);
+            }else{
+                int prob = rand()%2;
+                if(prob==0){
+                    iter = euler_path->erase(iter);
+                }else{
+                    euler_path->erase(visited[*iter]);
+                    visited[*iter] = iter;
+                    iter++;
+                }
+            }
+        }else{ // first visit
+            visited[*iter] = iter;
+            iter++;
+        }
+    }
+    visited.clear();
+    visited.shrink_to_fit();
+
+}
+
+
+void greedy2(list<int> *euler_path, int num_node_of_full){
+    cout << "'greedy2'"<<endl;
+    list<int>::iterator
+            junction_A=euler_path->end(),
+            junction_B= euler_path->end(),
+            junction_C=euler_path->end();
+    vector< list<int>::iterator > visited(num_node_of_full, euler_path->end());
+    list<int>::iterator iter = euler_path->begin();
+
+    // first iteration: remove duplicated visit of first or last node
+    iter++;
+    while(iter!=prev(euler_path->end())){
+        if(*iter==START or *iter==END){
+            iter = euler_path->erase(iter);
+        }
+        iter++;
+    }
+
+    // second iteration: set junctions -> compare costs -> short cutting
+    iter = euler_path->begin();
+    while(iter!=euler_path->end()){
+        if(visited[*iter] != euler_path->end()){ // duplicated visit
+            set<int> dup_visit;
+            dup_visit.insert(*iter);
+
+            // set junction A, B, C
+            junction_A = prev(visited[*iter]);
+            junction_B = prev(iter);
+            iter++;
+            while(visited[*iter]!=euler_path->end()){ //iterate until visiting a new node
+                long old_a = distance(euler_path->begin(), junction_A);
+                long prob_a = distance(euler_path->begin(), prev(visited[*iter]));
+                if(old_a > prob_a) {
+                    junction_A = prev(visited[*iter]);
+                }
+                if(*iter != *junction_B)
+                    dup_visit.insert(*iter);
+                iter++;
+            }
+            junction_C = iter;
+            visited[*iter] = iter;
+            iter++;
+
+
+            // calculate cost
+            int cost_prev=0, cost_curr=0;
+            set<int> copy_dup_visit = dup_visit;
+            // prev_cost
+            list<int>::iterator temp_iter = junction_A;
+            while (temp_iter!=junction_B){
+                cost_prev+=full_weight_matrix[*temp_iter][*next(temp_iter)];
+                temp_iter++;
+            }
+            cost_prev+=full_weight_matrix[*temp_iter][*junction_C];
+            // curr_cost
+            temp_iter = junction_A;
+            list<int>::iterator next_temp_iter = next(temp_iter);
+            while(next_temp_iter!=junction_B){
+                if(copy_dup_visit.find(*next_temp_iter) == copy_dup_visit.end())
+                    cost_curr+=full_weight_matrix[*temp_iter][*next_temp_iter];
+                temp_iter++;
+                next_temp_iter++;
+            }
+            cost_curr+=full_weight_matrix[*temp_iter][*next_temp_iter];
+            temp_iter++;// = junction_B
+            while (temp_iter!=junction_C){
+                if(copy_dup_visit.find(*next(temp_iter))!= copy_dup_visit.end()){
+                    cost_curr += full_weight_matrix[*temp_iter][*next(temp_iter)];
+                    copy_dup_visit.erase(*next(temp_iter));
+                }
+                temp_iter++;
+            }
+
+
+            //short cutting
+            if(cost_curr > cost_prev){
+                iter = junction_B;
+                iter++;
+                while(iter!=junction_C){
+                    iter = euler_path->erase(iter);
+                }
+                visited[*iter] = iter;
+            }else{
+                iter = junction_A;
+                iter++;
+                while(iter!=junction_B){
+                    if(dup_visit.find(*iter)!=dup_visit.end()){
+                        iter = euler_path->erase(iter);
+                    }else{
+                        iter++;
+                    }
+                }
+                iter++;
+                while(iter!=junction_C){
+                    if(*iter!=*junction_B) {
+                        visited[*iter] = iter;
+                        iter++;
+                    }else {
+                        iter = euler_path->erase(iter);
+                    }
+                }
+                visited[*iter] = iter;
+            }
+            iter++;
+        }else{ // first visit
+            visited[*iter] = iter;
+            iter++;
+        }
+
+    }
+    visited.clear();
+    visited.shrink_to_fit();
+}
+
 
 void greedy(list<int> *euler_path, int num_node_of_full){
     cout << "'greedy'"<<endl;
