@@ -9,13 +9,9 @@ bool exceed(float value, float boundary) {
 	return (value + ERROR_TOLERANCE > boundary);
 }
 
-
+// TODO : check if it is correct
 float** getMergedGraph(int s, int t, int n, float** inputGraph) {
-	// size will be n - 1
-	float** mergedGraph = new float*[n - 1];
-	for (int i = 0; i < n - 1; i++) {
-		mergedGraph[i] = new float[n - 1];
-	}
+	float** mergedGraph = create2dArr<float>(n - 1, 0.0f);
 
 	int newRow = 1;
 	for (int originalRow = 0; originalRow < n; originalRow++) {
@@ -39,3 +35,4 @@ float** getMergedGraph(int s, int t, int n, float** inputGraph) {
 	
 	return mergedGraph;
 }
+

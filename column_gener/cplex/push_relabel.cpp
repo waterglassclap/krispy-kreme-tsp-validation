@@ -76,7 +76,7 @@ int PushRelabel::checkNode(int i) {
 bool PushRelabel::push(int a, int b) {
 	float delta;
 	if (height[a] != height[b] + 1) {
-		cout<<"b is not near to a. terminate push."<<endl;
+		cout<<"b is not near to a. Terminate push."<<endl;
 		return false;
 	}
 
@@ -117,7 +117,7 @@ bool PushRelabel::push(int a, int b) {
 bool PushRelabel::relable(int a) {
 	//cout<<"now we do a relable for node "<<a<<endl;
 	if(excess[a] <= 0.0f) {
-		cout << "no excess for " << a << ". terminate relable" << endl;
+		cout << "no excess for " << a << ". Terminate relable" << endl;
 		return false;
 	}
 
@@ -140,71 +140,78 @@ bool PushRelabel::relable(int a) {
 
 
 void PushRelabel::mineMaxFlow() {
-    int i, j;
-    float current, target;
+	int i, j;
+	float current, target;
 	bool flag = true;
 
-	while(excessNode.size() != 0 && flag) {
+	while(excessNode.size() > 0 && flag) {
 		current = excessNode.at(0);
 		excessNode.pop_front();
 		target = checkNode(current);
 		if(checkNode(current) < 0) {
-			flag = relable(current);
-		} else {
-			flag = push(current, target);
+		 	flag = relable(current);
+		 } else {
+		 	flag = push(current, target);
 		}
 	}
 
 
-//	cout<<"the height function of each node is like: ";
-//	for(i = 0; i < nodeNumber; i++) {
-//		cout<<height[i]<<" ";
-//	}
-//	cout<<endl;
-//
-//	cout<<"the final flow is like:"<<endl;
-//	for(i = 0;i<nodeNumber;i++) {
-//		for(j = 0;j<nodeNumber;j++) {
-//			cout<<fMatrix[i][j]<<" ";
-//		}
-//		cout<<endl;
-//	}
+
+	// cout<<"the height function of each node is like: ";
+	// for(i = 0; i < nodeNumber; i++) {
+	// 	cout<<height[i]<<" ";
+	// }
+	// cout<<endl;
+
+	// cout<<"the final flow is like:"<<endl;
+	// for(i = 0;i<nodeNumber;i++) {
+	// 	for(j = 0;j<nodeNumber;j++) {
+	// 		cout<<fMatrix[i][j]<<" ";
+	// 	}
+	// 	cout<<endl;
+	// }
+
 }
 
 
 MinCutInfo PushRelabel::getMinCutInfo() {
-
 	mineMaxFlow();
 
 	MinCutInfo minCutInfo;
+	minCutInfo.nodeNum = nodeNumber;
+	minCutInfo.heights = new int[nodeNumber];
+	minCutInfo.cutHeight = -1;
+
+	memcpy(minCutInfo.heights, height, sizeof(int) * nodeNumber);
+
 	minCutInfo.size = 0;
 	minCutInfo.totalFlow = 0.0f;
 	minCutInfo.edgeInfos = new EdgeInfo[nodeNumber];
 
 	// height 별로 봐서 빈 하이트가 있으면, 그거 기준으로 위 아래 그래프 자르고 그 사이에 있는 edge들을 리턴함
-	// get no presence height
-	int noPresenceHeight = -1;
 	int maxHeight = *max_element(height, height + nodeNumber);
 	for(int i = 0 ; i < maxHeight; i++) {
 		// if given height not exists
 		if (find(height, height + nodeNumber, i) == height + nodeNumber) {
-			noPresenceHeight = i;
+			minCutInfo.cutHeight = i;
 			break;
 		}
 	}
 
-	if (noPresenceHeight < 0) {
-		//throw runtime_error("there is no height that no nodes included. terminate.");
-        cout << "there is no height that no nodes included. terminate." << endl;
+	if (minCutInfo.cutHeight < 0) {
+		//throw runtime_error("There is no height that no nodes included. Terminate.");
+        cout << "There is no height that no nodes included. Terminate.";
         exit(0);
 	}
 
 	// get min cut info
 	for (int i = 0; i < nodeNumber; i++) {
 		for (int j = 0; j < nodeNumber; j++) {
-			if (height[i] > noPresenceHeight && height[j] < noPresenceHeight
-			    && height[i] > height[j] && cMatrix[i][j] > 0.0f) {
-				minCutInfo.edgeInfos[minCutInfo.size].source = i;
+			// if (height[i] > minCutInfo.cutHeight && height[j] < minCutInfo.cutHeight
+			//     && height[i] > height[j] && cMatrix[i][j] > 0.0f) {
+			 if (height[i] > minCutInfo.cutHeight && height[j] < minCutInfo.cutHeight
+			     && height[i] > height[j]) {
+			 	minCutInfo.edgeInfos[minCutInfo.size].source = i;
 				minCutInfo.edgeInfos[minCutInfo.size].sink = j;
 				minCutInfo.edgeInfos[minCutInfo.size].weight = cMatrix[i][j];
 				minCutInfo.totalFlow += cMatrix[i][j];
@@ -212,7 +219,6 @@ MinCutInfo PushRelabel::getMinCutInfo() {
 			}
 		}
 	}
-
 	return minCutInfo;
 }
 
@@ -230,35 +236,43 @@ void PushRelabel::residualBuilder() {
 	}
 }
 
+void PushRelabel::freeVars() {
+	free2dArr<float>(nodeNumber, cMatrix);
+	free2dArr<float>(nodeNumber, rMatrix);
+	free2dArr<float>(nodeNumber, fMatrix);
+	delete[] height;
+	delete[] excess;
+}
+
 
 void PushRelabel::printInfo() {
-//	int i,j;
-//	cout<<"the capacity situation of this graph is:"<<endl;
-//	for (i = 0; i < nodeNumber; i++) {
-//	   for (j = 0; j < nodeNumber; j++) {
-//	      cout<<cMatrix[i][j]<<" ";
-//	   }
-//	   cout<<endl;
-//	}
-//
-//	cout<<"the flow situation of this graph is: "<<endl;
-//	for(i = 0;i<nodeNumber;i++) {
-//		for(j = 0;j<nodeNumber;j++) {
-//			cout<<fMatrix[i][j]<<" ";
-//		}
-//		cout<<endl;
-//	}
-//
-//	cout<<"the residual network looks like: "<<endl;
-//	for(i = 0; i < nodeNumber; i++) {
-//		for(j = 0; j < nodeNumber; j++) {
-//			cout << rMatrix[i][j] << " ";
-//		}
-//		cout<<endl;
-//	}
-//
-//	cout<<"the height function of each node is like: ";
-//	for(i = 0; i < nodeNumber; i++)
-//		cout<<height[i]<<" ";
-//	cout<<endl;
+	int i,j;
+	cout<<"the capacity situation of this graph is:"<<endl;
+	for (i = 0; i < nodeNumber; i++) {
+	   for (j = 0; j < nodeNumber; j++) {
+	      cout<<cMatrix[i][j]<<" ";
+	   }
+	   cout<<endl;
+	}
+
+	cout<<"the flow situation of this graph is: "<<endl;
+	for(i = 0;i<nodeNumber;i++) {
+		for(j = 0;j<nodeNumber;j++) {
+			cout<<fMatrix[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+
+	cout<<"the residual network looks like: "<<endl;
+	for(i = 0; i < nodeNumber; i++) {
+		for(j = 0; j < nodeNumber; j++) {
+			cout << rMatrix[i][j] << " ";
+		}
+		cout<<endl;
+	}
+
+	cout<<"the height function of each node is like: ";
+	for(i = 0; i < nodeNumber; i++)
+		cout<<height[i]<<" ";
+	cout<<endl;
 }

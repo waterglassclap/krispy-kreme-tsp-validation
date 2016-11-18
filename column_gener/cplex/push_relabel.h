@@ -14,6 +14,10 @@
 using namespace std;
 
 typedef struct MinCutInfo {
+	int* heights;
+	int cutHeight;
+	int nodeNum;
+
 	struct EdgeInfo* edgeInfos;
 	int size;
 	float totalFlow;
@@ -44,6 +48,7 @@ public:
 	bool push(int, int);
 	bool relable(int);
 	void mineMaxFlow();
+	void freeVars();
 	struct MinCutInfo getMinCutInfo();
 };
 
