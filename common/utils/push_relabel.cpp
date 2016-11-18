@@ -144,18 +144,18 @@ void PushRelabel::mineMaxFlow() {
 	float current, target;
 	bool flag = true;
 
-	while(excessNode.size() != 0 && flag) {
+	while(excessNode.size() > 0 && flag) {
 		current = excessNode.at(0);
 		excessNode.pop_front();
 		target = checkNode(current);
 		if(checkNode(current) < 0) {
-			flag = relable(current);
-		} else {
-			flag = push(current, target);
+		 	flag = relable(current);
+		 } else {
+		 	flag = push(current, target);
 		}
 	}
 
-/*
+
 
 	cout<<"the height function of each node is like: ";
 	for(i = 0; i < nodeNumber; i++) {
@@ -170,11 +170,12 @@ void PushRelabel::mineMaxFlow() {
 		}
 		cout<<endl;
 	}
-*/
+
 }
 
 
 MinCutInfo PushRelabel::getMinCutInfo() {
+	cout << "source : " << source << ", sink : " << sink << endl << endl;
 
 	mineMaxFlow();
 
@@ -206,9 +207,11 @@ MinCutInfo PushRelabel::getMinCutInfo() {
 	// get min cut info
 	for (int i = 0; i < nodeNumber; i++) {
 		for (int j = 0; j < nodeNumber; j++) {
-			if (height[i] > minCutInfo.cutHeight && height[j] < minCutInfo.cutHeight
-			    && height[i] > height[j] && cMatrix[i][j] > 0.0f) {
-				minCutInfo.edgeInfos[minCutInfo.size].source = i;
+			// if (height[i] > minCutInfo.cutHeight && height[j] < minCutInfo.cutHeight
+			//     && height[i] > height[j] && cMatrix[i][j] > 0.0f) {
+			 if (height[i] > minCutInfo.cutHeight && height[j] < minCutInfo.cutHeight
+			     && height[i] > height[j]) {
+			 	minCutInfo.edgeInfos[minCutInfo.size].source = i;
 				minCutInfo.edgeInfos[minCutInfo.size].sink = j;
 				minCutInfo.edgeInfos[minCutInfo.size].weight = cMatrix[i][j];
 				minCutInfo.totalFlow += cMatrix[i][j];
@@ -216,7 +219,6 @@ MinCutInfo PushRelabel::getMinCutInfo() {
 			}
 		}
 	}
-
 	return minCutInfo;
 }
 
