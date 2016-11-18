@@ -12,6 +12,7 @@ struct ErrorInfo getStErrorInfo(int s, int t, int n, float** inputGraph) {
         errorInfo.minCutInfo = mci;
         errorInfo.severity = 1.0f - mci.totalFlow;
     }
+    verifier.freeVars();
     return errorInfo;
 }
 
@@ -23,7 +24,7 @@ struct ErrorInfos getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
     
     if (s == t) {
         //throw runtime_error("s should not be equal to t. terminate.");
-        cout << "s should not be equal to t. terminate." << endl;
+        cout << "s should not be equal to t. terminate.";
         exit(0);
     }
     
@@ -38,8 +39,13 @@ struct ErrorInfos getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
                 errorInfos.infos[errorInfos.num].severity = 2.0f - mci.totalFlow;
                 errorInfos.num++;
             }
+            verifier.freeVars();
         }
     }
-    // TODO : free mergedGraph
+    //for (int i = 0; i < n; i++) {
+    //    delete[] mergedGraph[i];
+    //}
+    //delete mergedGraph;
+    //free2dArr(n, mergedGraph);
     return errorInfos;
 }

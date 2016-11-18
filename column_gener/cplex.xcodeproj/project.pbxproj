@@ -15,8 +15,9 @@
 		D7B137161DC5D95500F7B851 /* libcplexdistmip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B137131DC5D95400F7B851 /* libcplexdistmip.a */; };
 		D7B137171DC5D95500F7B851 /* libilocplex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B137141DC5D95400F7B851 /* libilocplex.a */; };
 		D7E499BD1DDC7D440002BE23 /* validation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7E499BB1DDC7D440002BE23 /* validation.cpp */; };
-		D7E499C31DDC82850002BE23 /* common_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7E499BF1DDC82850002BE23 /* common_util.cpp */; };
-		D7E499C41DDC82850002BE23 /* push_relabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7E499C11DDC82850002BE23 /* push_relabel.cpp */; };
+		D7EDB99D1DDDFD12005825D3 /* column_generation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7EDB99C1DDDFD12005825D3 /* column_generation.cpp */; };
+		D7EDB9AA1DDEE32B005825D3 /* common_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7EDB9A61DDEE32B005825D3 /* common_util.cpp */; };
+		D7EDB9AB1DDEE32B005825D3 /* push_relabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7EDB9A81DDEE32B005825D3 /* push_relabel.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,11 +45,13 @@
 		D7B137141DC5D95400F7B851 /* libilocplex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libilocplex.a; path = "../../Applications/IBM/ILOG/CPLEX_Studio1263/cplex/lib/x86-64_osx/static_pic/libilocplex.a"; sourceTree = "<group>"; };
 		D7E499BB1DDC7D440002BE23 /* validation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = validation.cpp; sourceTree = "<group>"; };
 		D7E499BE1DDC7D5E0002BE23 /* validation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = validation.h; sourceTree = "<group>"; };
-		D7E499BF1DDC82850002BE23 /* common_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = common_util.cpp; sourceTree = "<group>"; };
-		D7E499C01DDC82850002BE23 /* common_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common_util.h; sourceTree = "<group>"; };
-		D7E499C11DDC82850002BE23 /* push_relabel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = push_relabel.cpp; sourceTree = "<group>"; };
-		D7E499C21DDC82850002BE23 /* push_relabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = push_relabel.h; sourceTree = "<group>"; };
-		D7E499C51DDC82A30002BE23 /* edge_info.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = edge_info.h; sourceTree = "<group>"; };
+		D7EDB99C1DDDFD12005825D3 /* column_generation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = column_generation.cpp; sourceTree = "<group>"; };
+		D7EDB99E1DDDFD28005825D3 /* column_generation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = column_generation.h; sourceTree = "<group>"; };
+		D7EDB9A51DDEE150005825D3 /* edge_info.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = edge_info.h; sourceTree = "<group>"; };
+		D7EDB9A61DDEE32B005825D3 /* common_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = common_util.cpp; sourceTree = "<group>"; };
+		D7EDB9A71DDEE32B005825D3 /* common_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common_util.h; sourceTree = "<group>"; };
+		D7EDB9A81DDEE32B005825D3 /* push_relabel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = push_relabel.cpp; sourceTree = "<group>"; };
+		D7EDB9A91DDEE32B005825D3 /* push_relabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = push_relabel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,14 +91,16 @@
 		D7B136FF1DC5C22D00F7B851 /* cplex */ = {
 			isa = PBXGroup;
 			children = (
-				D7E499C51DDC82A30002BE23 /* edge_info.h */,
-				D7E499BF1DDC82850002BE23 /* common_util.cpp */,
-				D7E499C01DDC82850002BE23 /* common_util.h */,
-				D7E499C11DDC82850002BE23 /* push_relabel.cpp */,
-				D7E499C21DDC82850002BE23 /* push_relabel.h */,
+				D7EDB9A51DDEE150005825D3 /* edge_info.h */,
+				D7EDB9A61DDEE32B005825D3 /* common_util.cpp */,
+				D7EDB9A71DDEE32B005825D3 /* common_util.h */,
+				D7EDB9A81DDEE32B005825D3 /* push_relabel.cpp */,
+				D7EDB9A91DDEE32B005825D3 /* push_relabel.h */,
 				D7B137001DC5C22D00F7B851 /* main.cpp */,
 				D7E499BB1DDC7D440002BE23 /* validation.cpp */,
 				D7E499BE1DDC7D5E0002BE23 /* validation.h */,
+				D7EDB99C1DDDFD12005825D3 /* column_generation.cpp */,
+				D7EDB99E1DDDFD28005825D3 /* column_generation.h */,
 			);
 			path = cplex;
 			sourceTree = "<group>";
@@ -172,10 +177,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7EDB9AB1DDEE32B005825D3 /* push_relabel.cpp in Sources */,
 				D7E499BD1DDC7D440002BE23 /* validation.cpp in Sources */,
 				D7B137011DC5C22D00F7B851 /* main.cpp in Sources */,
-				D7E499C31DDC82850002BE23 /* common_util.cpp in Sources */,
-				D7E499C41DDC82850002BE23 /* push_relabel.cpp in Sources */,
+				D7EDB9AA1DDEE32B005825D3 /* common_util.cpp in Sources */,
+				D7EDB99D1DDDFD12005825D3 /* column_generation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
