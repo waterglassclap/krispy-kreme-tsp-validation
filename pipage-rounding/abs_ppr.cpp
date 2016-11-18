@@ -1,19 +1,21 @@
 #include "abs_ppr.h"
 
 // TODO : float error, 1e-9 handling
+// TODO : minset 찾는거 잘 되나 확인해보기
+// TODO : bug : j sink | source까지 포함시켜버림;
 
 void printPprAns(PprAns* pprAns) {
     cout << "====target y===="<< endl;
     for (int i = 0; i < pprAns->n; i++) {
         for (int j = 0; j <pprAns->n; j++) {
-            cout << pprAns->sol[i][j] << " ";
+            cout << pprAns->sol[i][j] << "\t";
         }
         cout << endl;
     }
     cout << "====target T===="<< endl;
     for (int i = 0; i < pprAns->n; i++) {
         for (int j = 0; j < pprAns->n; j++) {
-            cout << pprAns->T[i][j] << " ";
+            cout << pprAns->T[i][j] << "\t";
         }
         cout << endl;
     }
@@ -77,7 +79,9 @@ void mergeGraph(TwoDGraph<float>* targetGraph, IndiceDiff* indiceDiff, int first
                 currentCol = newCol;
                 newCol++;
             }
-            mergedSet[currentRow][currentCol] += targetGraph->set[originalRow][originalCol];
+            if (currentRow != currentCol) {
+                mergedSet[currentRow][currentCol] += targetGraph->set[originalRow][originalCol];
+            }
         }
     }
     // update target Graph set
@@ -114,33 +118,38 @@ void AbsPpr::initializeTightSet(PprAns* ans) {
 }
 
 // s is nodes[-2], t is nodes[-1]
-TwoDGraph<float>* AbsPpr::getValidationGraph(PprAns* prevAns) {
+TwoDGraph<float>* AbsPpr::getValidationGraph(PprAns* prevAns, EdgeInfo* firstEdge, EdgeInfo* secondEdge) {
     int n = prevAns->n + 2;
     TwoDGraph<float>* validationGraph = new TwoDGraph<float>;
     validationGraph->n = n;
     validationGraph->source = n - 2;
     validationGraph->sink = n - 1;
     validationGraph->set = create2dArr<float>(n, 0.0f);
-    //get wFromS: s -(wFromS)-> vi, which is 1/2 SIGMA(Ye, e E V) : TODO : is this correct?
-    float wFromS = 0.0f;
-    for (int i = 0; i < prevAns->n; i++) {
-        for (int j = i; j < prevAns->n; j++) {
-            wFromS += prevAns->sol[i][j];
+
+    validationGraph->set[n - 2][n - 1] = 0.0f;
+    validationGraph->set[n - 1][n - 2] = 0.0f;
+    // 3. fill the rest of the graph with prevAns weights;
+    for (int i = 0; i < n - 2; i++) {
+        for (int j = 0; j < n - 2; j++) {
+            if (j > i) {
+                validationGraph->set[i][j] = 0.5f * prevAns->sol[i][j];
+                validationGraph->set[j][i] = validationGraph->set[i][j];
+            }
         }
     }
     // 1. s -> vi to wFromS
     // 2. vi -> t to 1
     for (int i = 0; i < n; i++) {
-        validationGraph->set[n - 2][i] = wFromS;
-        validationGraph->set[i][n - 1] = 1.0f;
-    }
-    // 3. fill the rest of the graph with prevAns weights;
-    for (int i = 0; i < n - 2; i++) {
-        for (int j = 0; j < n - 2; j++) {
-            if (j > i) {
-                validationGraph->set[i][j] = prevAns->sol[i][j];
-                validationGraph->set[j][i] = validationGraph->set[i][j];
-            }
+        //get wFromS: s -(wFromS)-> vi, which is 1/2 SIGMA(Ye, e E V) : TODO : is this correct?
+        float wFromS = 0.0f;
+        for (int j = 0; j < prevAns->n; j++) {
+            wFromS += validationGraph->set[i][j];
+        }
+        if (i != n - 2) {
+            validationGraph->set[n - 2][i] = wFromS;
+        }
+        if (i != n - 1) {
+            validationGraph->set[i][n - 1] = 1.0f;
         }
     }
     return validationGraph;
@@ -169,20 +178,19 @@ EdgeInfo* AbsPpr::pullEdge(PprAns* ans) {
     return edge;
 }
 
-bool** AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
-    TwoDGraph<float>* validationGraph = getValidationGraph(prevAns);
+bool* AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
+    TwoDGraph<float>* validationGraph = getValidationGraph(prevAns, i, j);
     MinCutInfo mci;
     
     IndiceDiff* indiceDiff = new IndiceDiff;
     indiceDiff->n = validationGraph->n;
     indiceDiff->diffHistories = new deque<int>[validationGraph->n];
     // merge source with i.source and i.sink
-
     mergeGraph(validationGraph, indiceDiff, i->source, i->sink);
     mergeGraph(validationGraph, indiceDiff,
         indiceDiff->diffHistories[i->source].back(),
         indiceDiff->diffHistories[validationGraph->source].back());
-
+    
     // if i and j has no common node, compare:
     // 1) s <- merge(merge(i), s),      t <- merge(j.node[0], t)
     // 2) s <- merge(merge(i), s),      t <- merge(j.node[1], t)
@@ -243,6 +251,7 @@ bool** AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
                 indiceDiff->diffHistories[j->source].back(),
                 indiceDiff->diffHistories[validationGraph->sink].back());
         }
+
         // get min cut of validation graph
         PushRelabel verifier(
             indiceDiff->diffHistories[validationGraph->source].back(),
@@ -251,34 +260,25 @@ bool** AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
         mci = verifier.getMinCutInfo();
     }
 
-    bool *nodeMarker = new bool[prevAns->n], *tempNodeMarker = new bool[prevAns->n];
-    bool** minsetMarker = create2dArr<bool>(prevAns->n, false);
-
+    bool *minsetMarker = new bool[prevAns->n], *tempMinsetMarker = new bool[prevAns->n];
+    
     // separate nodes to 2 with min-cut
     for (int i = 0; i < mci.nodeNum; i++) {
         if (mci.heights[i] > mci.cutHeight) {
-            tempNodeMarker[i] = true;
+            tempMinsetMarker[i] = true;
         }
     }
     // reverse nodeMarker if true-set does not contain source
-    if (!tempNodeMarker[indiceDiff->diffHistories[i->source].back()]) {
+    if (!tempMinsetMarker[indiceDiff->diffHistories[i->source].back()]) {
         for (int i = 0; i < mci.nodeNum; i++) {
-            tempNodeMarker[i] = !tempNodeMarker[i];
-        }
-    }
-    // reverse minset marker with previous indices
-    for (int i = 0; i <prevAns->n; i++) {
-        if (tempNodeMarker[indiceDiff->diffHistories[i].back()]) {
-            nodeMarker[i] = true;
+            tempMinsetMarker[i] = !tempMinsetMarker[i];
         }
     }
 
-    // mark minsetMarker
-    for (int i = 0; i < prevAns->n; i++) {
-        for (int j = 0; j < prevAns->n; j++) {
-            if (nodeMarker[i] && nodeMarker[j]) {
-                minsetMarker[i][j] = true;
-            }
+    // reverse minset marker with previous indices
+    for (int i = 0; i <prevAns->n; i++) {
+        if (tempMinsetMarker[indiceDiff->diffHistories[i].back()]) {
+            minsetMarker[i] = true;
         }
     }
 
@@ -286,18 +286,29 @@ bool** AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
     delete validationGraph;
     delete[] indiceDiff->diffHistories;
     delete indiceDiff;
-    delete nodeMarker;
+    delete tempMinsetMarker;
     
     return minsetMarker;
 }
 
-float AbsPpr::getConstraintDelta(bool** minsetA, PprAns* prevAns) {
+float AbsPpr::getConstraintDelta(bool* minsetA, PprAns* prevAns) {
+
     int absA = 0;
     float sumAEdges = 0.0f;
+    printPprAns(prevAns);
+
+    cout << "==== minset A ===="<< endl;
     for (int i = 0; i < prevAns->n; i++) {
+        cout << minsetA[i] << " ";
+    }
+    cout << endl;
+
+    for (int i = 0; i < prevAns->n; i++) {
+        if (minsetA[i]) {
+            absA++;
+        }
         for (int j = i; j < prevAns->n; j++) {
-            if (minsetA[i][j]) {
-                absA++;
+            if (minsetA[i] && minsetA[j] && i != j) {
                 sumAEdges += prevAns->sol[i][j]; // TODO : is this correct?
             }
         }
@@ -307,25 +318,36 @@ float AbsPpr::getConstraintDelta(bool** minsetA, PprAns* prevAns) {
 
 PprAns* AbsPpr::hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
     PprAns* newAns = new PprAns;
-    bool** minsetA = getMinsetA(prevAns, i, j);
-    float constraintDelta = getConstraintDelta(minsetA, prevAns); 
-    cout << "constraintDelta : " << constraintDelta << endl;
+    newAns->n = prevAns->n;
+
+    cout << "hit constraint for i : " << i->source << ", " << i->sink << " and j : " << j->source << ", " << j->sink << endl;
     
-    if (constraintDelta < 0.0f) {
+    // 1. build newAns->minsetA newAns->T
+    newAns->minsetA = getMinsetA(prevAns, i, j);
+    // get T from minset
+    newAns->T = create2dArr<bool>(prevAns->n, false);
+    for (int i = 0; i < prevAns->n; i++) {
+        for (int j = 0; j < prevAns->n; j++) {
+            if (newAns->minsetA[i] && newAns->minsetA[j] && i != j) {
+                newAns->T[i][j] = true;
+            }
+        }
+    }
+    
+    // 2. build newAns->delta
+    newAns->delta = getConstraintDelta(newAns->minsetA, prevAns);
+    cout << "constraintDelta : " << newAns->delta << endl;
+    if (newAns->delta < 0.0f) {
         throw runtime_error("constraintDelta is smaller than 0, something's wrong! Terminate.");
     }
-
-    if (prevAns->sol[j->source][j->sink] < constraintDelta) {
-        // TODO : just terminate?
-        minsetA = create2dArr<bool>(prevAns->n, false);
-        constraintDelta = prevAns->sol[j->source][j->sink];
+    // check if delta meet lower bound. If so, update
+    if (prevAns->sol[j->source][j->sink] < newAns->delta) {
+        free2dArr<bool>(prevAns->n, newAns->T);
+        newAns->T = create2dArr<bool>(prevAns->n, false);
+        newAns->delta = prevAns->sol[j->source][j->sink];
     }
 
-    newAns->n = prevAns->n;
-    newAns->T = minsetA;
-    newAns->delta = constraintDelta;
-
-    // copy prevAns solution
+    // 3. build newAns->sol
     newAns->sol = new float*[newAns->n];
     for (int i = 0; i < newAns->n; i++) {
         newAns->sol[i] = new float[newAns->n];
@@ -334,13 +356,12 @@ PprAns* AbsPpr::hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
         }
     }
     // yi = yi + delta
-    newAns->sol[i->source][i->sink] += constraintDelta;
-    newAns->sol[i->sink][i->source] += constraintDelta;
+    newAns->sol[i->source][i->sink] += newAns->delta;
+    newAns->sol[i->sink][i->source] += newAns->delta;
     // yj = yj - delta
-    newAns->sol[j->source][j->sink] -= constraintDelta;
-    newAns->sol[j->sink][j->source] -= constraintDelta;
-    
-    
+    newAns->sol[j->source][j->sink] -= newAns->delta;
+    newAns->sol[j->sink][j->source] -= newAns->delta;
+
     return newAns;
 }
 
@@ -358,10 +379,19 @@ void AbsPpr::pipageRound(PprAns* targetAns) {
                 printPprAns(targetAns);
                 break;
             }
-            PprAns* incAns = hitConstraint(targetAns, i, j);
-            PprAns* decAns = hitConstraint(targetAns, j, i);
-            updateSol(targetAns, incAns, decAns);
+
+            cout << "===== prev ans =====" << endl;
             printPprAns(targetAns);
+            cout << endl << endl;
+        
+            cout << "===== inc ans =====" << endl;
+            PprAns* incAns = hitConstraint(targetAns, i, j);
+            cout << endl << endl;
+        
+            cout << "===== dec ans =====" << endl;
+            PprAns* decAns = hitConstraint(targetAns, j, i);
+
+            updateSol(targetAns, incAns, decAns);
         }
     }
 }

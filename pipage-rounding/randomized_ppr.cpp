@@ -11,7 +11,9 @@ void RandomizedPpr::updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns)
 
     // get probability p by vector diff sizes
     float p = probNumerator / probDenominator;
-    float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // 0.0 to 1.0
+    //float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // 0.0 to 1.0
+    //float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // 0.0 to 1.0
+    float r = 0.5f;
 
     // with probability p, select decFsCsPair or incFsCsPair
     if (r <= p) {
@@ -22,13 +24,21 @@ void RandomizedPpr::updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns)
         notSelectedAns = decAns;
     }
 
-    free2dArr(notSelectedAns->n, notSelectedAns->sol);
-    free2dArr(notSelectedAns->n, notSelectedAns->T);
+    free2dArr<float>(notSelectedAns->n, notSelectedAns->sol);
+    free2dArr<bool>(notSelectedAns->n, notSelectedAns->T);
     delete notSelectedAns;  
     
     // y <- y'
-    free2dArr(targetAns->n, targetAns->sol);
+    free2dArr<float>(targetAns->n, targetAns->sol);
     targetAns->sol = selectedAns->sol;
     // T <- T /\ A'
-    // TODO : intersect T
+    for (int i = 0; i <targetAns->n; i++) {
+        for (int j = 0; j < targetAns->n; j++) {
+            if (targetAns->minsetA[i] && selectedAns->minsetA[j] && i != j) {
+                    targetAns->T[i][j] = true;
+                } else {
+                    targetAns->T[i][j] = false;
+                }
+            }
+        }
 }

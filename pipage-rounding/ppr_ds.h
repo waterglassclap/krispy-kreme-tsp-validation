@@ -5,6 +5,7 @@ typedef struct PprAns {
     int n;
     float delta;
     float** sol;
+    bool* minsetA;
     bool** T;
 } PprAns;
 

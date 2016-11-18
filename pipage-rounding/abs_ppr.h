@@ -25,11 +25,11 @@ public:
     bool isIntegral(PprAns* ans);
     void initializeTightSet(PprAns* ans);
     EdgeInfo* pullEdge(PprAns* ans);
-    bool** getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
-    float getConstraintDelta(bool** minsetA, PprAns* prevAns);
+    bool* getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
+    float getConstraintDelta(bool* minsetA, PprAns* prevAns);
     PprAns* hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
     virtual void updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns) = 0;
-    TwoDGraph<float>* getValidationGraph(PprAns* prevAns);
+    TwoDGraph<float>* getValidationGraph(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
     void pipageRound(PprAns* targetAns);
 };
 
