@@ -29,7 +29,9 @@ float** getMergedGraph(int s, int t, int n, float** inputGraph) {
 				currentCol = newCol;
 				newCol++;
 			}
-			mergedGraph[currentRow][currentCol] += inputGraph[originalRow][originalCol];
+			if (currentRow != currentCol) {
+				mergedGraph[currentRow][currentCol] += inputGraph[originalRow][originalCol];
+			}
 		}
 	}
 	

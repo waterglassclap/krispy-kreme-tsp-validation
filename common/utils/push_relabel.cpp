@@ -28,7 +28,7 @@ PushRelabel::PushRelabel(int s, int t, int nodeNum, float** arr) {
 		rMatrix[i] = new float[nodeNumber];
 		cMatrix[i] = new float[nodeNumber];
 		fMatrix[i] = new float[nodeNumber];
-		for(j = 0; j < nodeNumber; j++)			{
+		for(j = 0; j < nodeNumber; j++)	{
 			cMatrix[i][j] = arr[i][j];
 			fMatrix[i][j] = 0.0f;
 			rMatrix[i][j] = 0.0f;
@@ -121,7 +121,7 @@ bool PushRelabel::relable(int a) {
 		return false;
 	}
 
-	int i;
+	/*int i;
 	int temp = height[0];
 	for(i = 0; i < nodeNumber; i++) {
 		if(rMatrix[a][i] > 0.0f && height[i] < temp) {
@@ -129,7 +129,8 @@ bool PushRelabel::relable(int a) {
 		}
 	}
 
-	height[a] = temp + 1;
+	height[a] = temp + 1;*/
+	height[a]++;
 
 	excessNode.push_back(a);
 
@@ -144,18 +145,25 @@ void PushRelabel::mineMaxFlow() {
 	float current, target;
 	bool flag = true;
 
+	cout << "min Max flow for source : " << source << ", sink : " << sink << endl;
+
 	while(excessNode.size() > 0 && flag) {
 		current = excessNode.at(0);
 		excessNode.pop_front();
 		target = checkNode(current);
 		if(checkNode(current) < 0) {
+			cout << "relabel" << current << endl;
 		 	flag = relable(current);
 		 } else {
+		 	cout << "push" << current << " " << target << endl;
 		 	flag = push(current, target);
 		}
+		//printInfo();
 	}
 
+	cin.ignore();
 
+	printInfo();
 
 	// cout<<"the height function of each node is like: ";
 	// for(i = 0; i < nodeNumber; i++) {
@@ -186,7 +194,7 @@ MinCutInfo PushRelabel::getMinCutInfo() {
 
 	minCutInfo.size = 0;
 	minCutInfo.totalFlow = 0.0f;
-	minCutInfo.edgeInfos = new EdgeInfo[nodeNumber];
+	minCutInfo.edgeInfos = new EdgeInfo[nodeNumber * nodeNumber];
 
 	// height 별로 봐서 빈 하이트가 있으면, 그거 기준으로 위 아래 그래프 자르고 그 사이에 있는 edge들을 리턴함
 	int maxHeight = *max_element(height, height + nodeNumber);
@@ -248,7 +256,7 @@ void PushRelabel::printInfo() {
 	cout<<"the capacity situation of this graph is:"<<endl;
 	for (i = 0; i < nodeNumber; i++) {
 	   for (j = 0; j < nodeNumber; j++) {
-	      cout<<cMatrix[i][j]<<" ";
+	      cout<<cMatrix[i][j]<<"\t";
 	   }
 	   cout<<endl;
 	}
@@ -256,7 +264,7 @@ void PushRelabel::printInfo() {
 	cout<<"the flow situation of this graph is: "<<endl;
 	for(i = 0;i<nodeNumber;i++) {
 		for(j = 0;j<nodeNumber;j++) {
-			cout<<fMatrix[i][j]<<" ";
+			cout<<fMatrix[i][j]<<"\t";
 		}
 		cout<<endl;
 	}
@@ -264,13 +272,13 @@ void PushRelabel::printInfo() {
 	cout<<"the residual network looks like: "<<endl;
 	for(i = 0; i < nodeNumber; i++) {
 		for(j = 0; j < nodeNumber; j++) {
-			cout << rMatrix[i][j] << " ";
+			cout << rMatrix[i][j] << "\t";
 		}
 		cout<<endl;
 	}
 
 	cout<<"the height function of each node is like: ";
 	for(i = 0; i < nodeNumber; i++)
-		cout<<height[i]<<" ";
+		cout<<height[i]<<"\t";
 	cout<<endl;
 }

@@ -11,7 +11,7 @@ bool exceed(float value, float boundary);
 float** getMergedGraph(int s, int t, int n, float** inputGraph);
 template <typename T> void free2dArr(int n, T** inputGraph) {
 	for (int i = 0; i < n; i++) {
-		delete[] inputGraph[i];
+		delete inputGraph[i];
 	}
 	delete[] inputGraph;
 }
