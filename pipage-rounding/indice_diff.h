@@ -6,8 +6,8 @@
 using namespace std;
 
 typedef struct IndiceDiff {
-	int n;
-	deque<int>* diffHistories; // TODO : is this deque array?
+    int n;
+    deque<int>* diffHistories;
 } IndiceDiff;
 
 #endif

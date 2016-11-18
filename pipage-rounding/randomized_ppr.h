@@ -8,7 +8,7 @@ using namespace std;
 
 class RandomizedPpr : public AbsPpr {
 public:
-	RandomizedPpr() : AbsPpr() {};
+    RandomizedPpr() : AbsPpr() {};
     virtual void updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns);
 };
 
