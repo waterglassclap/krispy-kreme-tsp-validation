@@ -48,6 +48,7 @@ public:
 	bool push(int, int);
 	bool relable(int);
 	void mineMaxFlow();
+	void freeVars();
 	struct MinCutInfo getMinCutInfo();
 };
 

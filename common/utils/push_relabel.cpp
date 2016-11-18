@@ -157,26 +157,24 @@ void PushRelabel::mineMaxFlow() {
 
 
 
-	cout<<"the height function of each node is like: ";
-	for(i = 0; i < nodeNumber; i++) {
-		cout<<height[i]<<" ";
-	}
-	cout<<endl;
+	// cout<<"the height function of each node is like: ";
+	// for(i = 0; i < nodeNumber; i++) {
+	// 	cout<<height[i]<<" ";
+	// }
+	// cout<<endl;
 
-	cout<<"the final flow is like:"<<endl;
-	for(i = 0;i<nodeNumber;i++) {
-		for(j = 0;j<nodeNumber;j++) {
-			cout<<fMatrix[i][j]<<" ";
-		}
-		cout<<endl;
-	}
+	// cout<<"the final flow is like:"<<endl;
+	// for(i = 0;i<nodeNumber;i++) {
+	// 	for(j = 0;j<nodeNumber;j++) {
+	// 		cout<<fMatrix[i][j]<<" ";
+	// 	}
+	// 	cout<<endl;
+	// }
 
 }
 
 
 MinCutInfo PushRelabel::getMinCutInfo() {
-	cout << "source : " << source << ", sink : " << sink << endl << endl;
-
 	mineMaxFlow();
 
 	MinCutInfo minCutInfo;
@@ -234,6 +232,14 @@ void PushRelabel::residualBuilder() {
 			}
 		}
 	}
+}
+
+void PushRelabel::freeVars() {
+	free2dArr<float>(nodeNumber, cMatrix);
+	free2dArr<float>(nodeNumber, rMatrix);
+	free2dArr<float>(nodeNumber, fMatrix);
+	delete[] height;
+	delete[] excess;
 }
 
 

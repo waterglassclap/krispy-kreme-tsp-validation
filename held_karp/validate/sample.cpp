@@ -27,6 +27,7 @@ struct ErrorInfo getStErrorInfo(int s, int t, int n, float** inputGraph) {
 		errorInfo.minCutInfo = mci;
 		errorInfo.severity = 1.0f - mci.totalFlow;
 	}
+    verifier.freeVars();
 	return errorInfo;
 }
 
@@ -51,6 +52,7 @@ struct ErrorInfos getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
 				errorInfos.infos[errorInfos.num].severity = 2.0f - mci.totalFlow;
 				errorInfos.num++;
 			}
+            verifier.freeVars();
     	}
     }
     //for (int i = 0; i < n; i++) {
