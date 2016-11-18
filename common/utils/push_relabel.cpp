@@ -76,7 +76,7 @@ int PushRelabel::checkNode(int i) {
 bool PushRelabel::push(int a, int b) {
 	float delta;
 	if (height[a] != height[b] + 1) {
-		cout<<"b is not near to a. terminate push."<<endl;
+		cout<<"b is not near to a. Terminate push."<<endl;
 		return false;
 	}
 
@@ -117,7 +117,7 @@ bool PushRelabel::push(int a, int b) {
 bool PushRelabel::relable(int a) {
 	//cout<<"now we do a relable for node "<<a<<endl;
 	if(excess[a] <= 0.0f) {
-		cout << "no excess for " << a << ". terminate relable" << endl;
+		cout << "no excess for " << a << ". Terminate relable" << endl;
 		return false;
 	}
 
@@ -155,6 +155,7 @@ void PushRelabel::mineMaxFlow() {
 		}
 	}
 
+/*
 
 	cout<<"the height function of each node is like: ";
 	for(i = 0; i < nodeNumber; i++) {
@@ -169,6 +170,7 @@ void PushRelabel::mineMaxFlow() {
 		}
 		cout<<endl;
 	}
+*/
 }
 
 
@@ -177,30 +179,34 @@ MinCutInfo PushRelabel::getMinCutInfo() {
 	mineMaxFlow();
 
 	MinCutInfo minCutInfo;
+	minCutInfo.nodeNum = nodeNumber;
+	minCutInfo.heights = new int[nodeNumber];
+	minCutInfo.cutHeight = -1;
+
+	memcpy(minCutInfo.heights, height, sizeof(int) * nodeNumber);
+
 	minCutInfo.size = 0;
 	minCutInfo.totalFlow = 0.0f;
 	minCutInfo.edgeInfos = new EdgeInfo[nodeNumber];
 
 	// height 별로 봐서 빈 하이트가 있으면, 그거 기준으로 위 아래 그래프 자르고 그 사이에 있는 edge들을 리턴함
-	// get no presence height
-	int noPresenceHeight = -1;
 	int maxHeight = *max_element(height, height + nodeNumber);
 	for(int i = 0 ; i < maxHeight; i++) {
 		// if given height not exists
 		if (find(height, height + nodeNumber, i) == height + nodeNumber) {
-			noPresenceHeight = i;
+			minCutInfo.cutHeight = i;
 			break;
 		}
 	}
 
-	if (noPresenceHeight < 0) {
-		throw runtime_error("there is no height that no nodes included. terminate.");
+	if (minCutInfo.cutHeight < 0) {
+		throw runtime_error("There is no height that no nodes included. Terminate.");
 	}
 
 	// get min cut info
 	for (int i = 0; i < nodeNumber; i++) {
 		for (int j = 0; j < nodeNumber; j++) {
-			if (height[i] > noPresenceHeight && height[j] < noPresenceHeight
+			if (height[i] > minCutInfo.cutHeight && height[j] < minCutInfo.cutHeight
 			    && height[i] > height[j] && cMatrix[i][j] > 0.0f) {
 				minCutInfo.edgeInfos[minCutInfo.size].source = i;
 				minCutInfo.edgeInfos[minCutInfo.size].sink = j;

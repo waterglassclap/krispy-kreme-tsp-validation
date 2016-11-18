@@ -74,9 +74,17 @@ class MSTBuilder(object):
 
 def sample():
     """ sample for MSTBuilder """
-    tsp_configs = TSPFetcher().list()
+    configs = TSPFetcher().list()
     builder = MSTBuilder()
-    builder.build(tsp_configs[0])
+    #builder.build(configs[0])
+
+    for i in range(0, len(configs)):
+        try:
+            print i
+            print configs[i]
+            builder.build(configs[i])
+        except Exception:
+            print "no file for " + str(i) + ". proceed."
     #builder.build_all()
 
 

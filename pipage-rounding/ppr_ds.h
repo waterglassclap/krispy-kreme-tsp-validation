@@ -3,6 +3,7 @@
 
 typedef struct PprAns {
 	int n;
+	float delta;
 	float** sol;
 	bool** T;
 } PprAns;

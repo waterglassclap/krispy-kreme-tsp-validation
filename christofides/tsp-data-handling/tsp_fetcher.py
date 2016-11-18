@@ -92,7 +92,21 @@ def sample():
     """ sample for TSPFetcher """
     fetcher = TSPFetcher()
     configs = fetcher.list()
-    fetcher.fetch(configs[0])
+    # except brd14051 : 9
+    # except d15112 : 20
+    # except fnl4461 : 29
+    # except linhp318 : 55 - no zip
+    # except pla7397 : 62
+    # except pla33810 : 63
+    # except pla85900 : 64
+    # except rl5915 : 85
+    # except rl5934 : 86
+    # except rl11849 : 87
+    # except usa13509 : 105
+    for i in range(106, len(configs)):
+        print i
+        print configs[i]
+        fetcher.fetch(configs[i])
     #fecther.fetch_all()
 
 

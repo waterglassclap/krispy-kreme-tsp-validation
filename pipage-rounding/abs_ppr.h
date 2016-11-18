@@ -4,15 +4,18 @@
 #include <utility>
 #include <iostream>
 #include <deque>
+#include <stack>
 
 #include <climits>
 #include <float.h>
 #include <algorithm>
 
 #include "../common/model/edge_info.h"
+#include "../common/model/two_d_graph.h"
 #include "../common/utils/common_util.h"
 #include "../common/utils/push_relabel.h"
 #include "ppr_ds.h"
+#include "indice_diff.h"
 
 using namespace std;
 
@@ -22,8 +25,11 @@ public:
 	bool isIntegral(PprAns* ans);
 	void initializeTightSet(PprAns* ans);
 	EdgeInfo* pullEdge(PprAns* ans);
+	bool** getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
+	float getConstraintDelta(bool** minsetA, PprAns* prevAns);
 	PprAns* hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
 	virtual void updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns) = 0;
+	TwoDGraph<float>* getValidationGraph(PprAns* prevAns);
 	void pipageRound(PprAns* targetAns);
 };
 

@@ -7,8 +7,6 @@
 using namespace std;
 
 class RandomizedPpr : public AbsPpr {
-private:
-	float getSolDiffSize(PprAns* first, PprAns* second);
 public:
 	RandomizedPpr() : AbsPpr() {};
     virtual void updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns);
