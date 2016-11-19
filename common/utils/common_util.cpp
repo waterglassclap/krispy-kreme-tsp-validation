@@ -9,6 +9,12 @@ bool exceed(float value, float boundary) {
 	return (value + ERROR_TOLERANCE > boundary);
 }
 
+bool roughly_equal(float value, float boundary) {
+	bool lower_equal = (value + ERROR_TOLERANCE >= boundary && value < boundary);
+	bool upper_equal = (value > boundary && value - ERROR_TOLERANCE <= boundary);
+	return value == boundary || lower_equal || upper_equal;
+}
+
 // TODO : check if it is correct
 float** getMergedGraph(int s, int t, int n, float** inputGraph) {
 	float** mergedGraph = create2dArr<float>(n - 1, 0.0f);
