@@ -78,14 +78,10 @@ int main() {
     // targetAns->sol[1][2] = 1.0f;
     // targetAns->sol[2][1] = 1.0f;
 
-    for (int i = 0; i < targetAns->n; i++) {
-        for (int j = 0; j < targetAns->n; j++) {
-            cout << targetAns->sol[i][j] << "\t";
-        }
-        cout << endl;
-    }
-
     targetAns->minsetA = new bool[targetAns->n];
+    for (int i = 0; i < targetAns->n; i++) {
+        targetAns->minsetA[i] = true;
+    }
     targetAns->T = create2dArr<bool>(targetAns->n, true);
 
     RandomizedPpr rppr = RandomizedPpr();

@@ -9,11 +9,12 @@ void RandomizedPpr::updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns)
         throw runtime_error("no delta. terminate."); // TODO : is this correct?
     }
 
+    srand((unsigned int)time(NULL));
     // get probability p by vector diff sizes
     float p = probNumerator / probDenominator;
+    float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // 0.0 to 1.0
     //float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // 0.0 to 1.0
-    //float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX); // 0.0 to 1.0
-    float r = 0.5f;
+    //float r = 0.5f;
 
     // with probability p, select decFsCsPair or incFsCsPair
     if (r <= p) {
@@ -33,12 +34,19 @@ void RandomizedPpr::updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns)
     targetAns->sol = selectedAns->sol;
     // T <- T /\ A'
     for (int i = 0; i <targetAns->n; i++) {
+        if (targetAns->minsetA[i] && selectedAns->minsetA[i]) {
+            targetAns->minsetA[i] = true;
+        } else {
+            targetAns->minsetA[i] = false;
+        }
+    }
+    for (int i = 0; i <targetAns->n; i++) {
         for (int j = 0; j < targetAns->n; j++) {
-            if (targetAns->minsetA[i] && selectedAns->minsetA[j] && i != j) {
-                    targetAns->T[i][j] = true;
-                } else {
-                    targetAns->T[i][j] = false;
-                }
+            if (targetAns->minsetA[i] && targetAns->minsetA[j] && i != j) {
+                targetAns->T[i][j] = true;
+            } else {
+               targetAns->T[i][j] = false;
             }
         }
+    }
 }

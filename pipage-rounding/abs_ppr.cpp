@@ -1,8 +1,6 @@
 #include "abs_ppr.h"
 
 // TODO : float error, 1e-9 handling
-// TODO : minset 찾는거 잘 되나 확인해보기
-// TODO : 왜 할때마다 변함
 
 void printPprAns(PprAns* pprAns) {
     cout << "====target y===="<< endl;
@@ -19,7 +17,6 @@ void printPprAns(PprAns* pprAns) {
         }
         cout << endl;
     }
-    cin.ignore();
 }
 
 TwoDGraph<float>* getTwoDGraphCopy(TwoDGraph<float>* inputGraph) {
@@ -105,7 +102,12 @@ bool AbsPpr::isIntegral(PprAns* ans) {
 
 
 void AbsPpr::initializeTightSet(PprAns* ans) {
-    delete ans->T;
+    free2dArr<bool>(ans->n, ans->T);
+    delete[] ans->minsetA;
+    ans->minsetA = new bool[ans->n];
+    for (int i = 0; i < ans->n; i++) {
+        ans->minsetA[i] = true;
+    }
     ans->T = create2dArr<bool>(ans->n, true);
     for (int i = 0; i < ans->n; i++) {
         ans->T[i][i] = false;
@@ -206,17 +208,26 @@ bool* AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
             tempIndiceDiff2->diffInfo[j->sink],
             tempIndiceDiff2->diffInfo[tempGraph2->sink]);
 
-        PushRelabel verifier1(
+        // PushRelabel verifier1(
+        //     tempIndiceDiff1->diffInfo[tempGraph1->source],
+        //     tempIndiceDiff1->diffInfo[tempGraph1->sink],
+        //     tempGraph1->n, tempGraph1->set);
+        // PushRelabel verifier2(
+        //     tempIndiceDiff2->diffInfo[tempGraph2->source],
+        //     tempIndiceDiff2->diffInfo[tempGraph2->sink],
+        //     tempGraph2->n, tempGraph2->set);
+
+        // MinCutInfo tempMinCutInfo1 = verifier1.getMinCutInfo();
+        // MinCutInfo tempMinCutInfo2 = verifier2.getMinCutInfo();
+ 
+        MinCutInfo tempMinCutInfo1 = MincutUtil().getMinCutInfo(
             tempIndiceDiff1->diffInfo[tempGraph1->source],
             tempIndiceDiff1->diffInfo[tempGraph1->sink],
             tempGraph1->n, tempGraph1->set);
-        PushRelabel verifier2(
+        MinCutInfo tempMinCutInfo2 = MincutUtil().getMinCutInfo(
             tempIndiceDiff2->diffInfo[tempGraph2->source],
             tempIndiceDiff2->diffInfo[tempGraph2->sink],
             tempGraph2->n, tempGraph2->set);
-
-        MinCutInfo tempMinCutInfo1 = verifier1.getMinCutInfo();
-        MinCutInfo tempMinCutInfo2 = verifier2.getMinCutInfo();
 
         delete[] indiceDiff->diffInfo;
         delete indiceDiff;
@@ -251,11 +262,15 @@ bool* AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
         }
 
         // get min cut of validation graph
-        PushRelabel verifier(
+        // PushRelabel verifier(
+        //     indiceDiff->diffInfo[validationGraph->source],
+        //     indiceDiff->diffInfo[validationGraph->sink],
+        //     validationGraph->n, validationGraph->set);
+        // mci = verifier.getMinCutInfo();
+        mci = MincutUtil().getMinCutInfo(
             indiceDiff->diffInfo[validationGraph->source],
             indiceDiff->diffInfo[validationGraph->sink],
             validationGraph->n, validationGraph->set);
-        mci = verifier.getMinCutInfo();
     }
 
     bool *minsetMarker = new bool[prevAns->n], *tempMinsetMarker = new bool[prevAns->n];
@@ -279,7 +294,7 @@ bool* AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
             minsetMarker[i] = true;
         }
     }
-
+    
     free2dArr<float>(validationGraph->n, validationGraph->set);
     delete validationGraph;
     delete[] indiceDiff->diffInfo;
@@ -327,12 +342,10 @@ PprAns* AbsPpr::hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
     }
     // check if delta meet lower bound. If so, update
     if (prevAns->sol[j->source][j->sink] < newAns->delta) {
-        cout << " delta met lower bound. j weight : " << prevAns->sol[j->source][j->sink] << ", delta" << newAns->delta << endl;
         free2dArr<bool>(prevAns->n, newAns->T);
         newAns->T = create2dArr<bool>(prevAns->n, false);
         newAns->delta = prevAns->sol[j->source][j->sink];
-    }
-
+    }    
     // 3. build newAns->sol
     newAns->sol = new float*[newAns->n];
     for (int i = 0; i < newAns->n; i++) {
@@ -359,13 +372,13 @@ void AbsPpr::pipageRound(PprAns* targetAns) {
             EdgeInfo* j = pullEdge(targetAns);
             // invalid edge
             if (i->source < 0 || j->source < 0) {
-                cout << "invalid edge. break" << endl;
+                //cout << "invalid edge. break" << endl;
                 break;
             }
-
             PprAns* incAns = hitConstraint(targetAns, i, j);
             PprAns* decAns = hitConstraint(targetAns, j, i);
-            updateSol(targetAns, incAns, decAns);            
+            updateSol(targetAns, incAns, decAns);    
         }
     }
+    printPprAns(targetAns);
 }

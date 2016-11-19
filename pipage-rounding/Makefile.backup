@@ -1,0 +1,19 @@
+.SUFFIXES = .c .o
+CC = g++
+CFLAGS = -g -ansi -pedantic-errors -Wall
+LDFLAGS = -lpthread -lm
+
+UTIL_DIR = ../common/utils
+
+OBJS = sample.o
+
+SOURCES = $(UTIL_DIR)/common_util.cpp $(UTIL_DIR)/max-flow-min-cut-graph-cut/src/mincut_util.cpp $(UTIL_DIR)/max-flow-min-cut-graph-cut/src/mincut_util.cpp abs_ppr.cpp randomized_ppr.cpp sample.cpp
+
+all: sample
+
+sample: $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(SOURCES)
+
+clean:
+	rm -rf $(OBJS) sample sample.dSYM
+

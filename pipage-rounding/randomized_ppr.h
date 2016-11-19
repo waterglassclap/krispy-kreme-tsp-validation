@@ -1,6 +1,7 @@
 #ifndef RANDOMIZED_PPR_H
 #define RANDOMIZED_PPR_H
 
+#include <ctime>
 #include "ppr_ds.h"
 #include "abs_ppr.h"
 
