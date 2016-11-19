@@ -86,7 +86,7 @@ int main() {
     }
 
     targetAns->minsetA = new bool[targetAns->n];
-    targetAns->T = create2dArr<bool>(targetAns->n, false);
+    targetAns->T = create2dArr<bool>(targetAns->n, true);
 
     RandomizedPpr rppr = RandomizedPpr();
     rppr.pipageRound(targetAns);

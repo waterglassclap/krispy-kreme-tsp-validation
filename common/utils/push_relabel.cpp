@@ -145,40 +145,22 @@ void PushRelabel::mineMaxFlow() {
 	float current, target;
 	bool flag = true;
 
-	cout << "min Max flow for source : " << source << ", sink : " << sink << endl;
+	//cout << "mine Max flow for source : " << source << ", sink : " << sink << endl;
 
 	while(excessNode.size() > 0 && flag) {
 		current = excessNode.at(0);
 		excessNode.pop_front();
 		target = checkNode(current);
 		if(checkNode(current) < 0) {
-			cout << "relabel" << current << endl;
+			//cout << "relabel" << current << endl;
 		 	flag = relable(current);
 		 } else {
-		 	cout << "push" << current << " " << target << endl;
+		 	//cout << "push" << current << " " << target << endl;
 		 	flag = push(current, target);
 		}
-		//printInfo();
 	}
-
-	cin.ignore();
-
 	printInfo();
-
-	// cout<<"the height function of each node is like: ";
-	// for(i = 0; i < nodeNumber; i++) {
-	// 	cout<<height[i]<<" ";
-	// }
-	// cout<<endl;
-
-	// cout<<"the final flow is like:"<<endl;
-	// for(i = 0;i<nodeNumber;i++) {
-	// 	for(j = 0;j<nodeNumber;j++) {
-	// 		cout<<fMatrix[i][j]<<" ";
-	// 	}
-	// 	cout<<endl;
-	// }
-
+	cin.ignore();
 }
 
 
@@ -253,6 +235,7 @@ void PushRelabel::freeVars() {
 
 void PushRelabel::printInfo() {
 	int i,j;
+	cout << "==== result for source : " << source << ", sink : " << sink << "====" << endl;
 	cout<<"the capacity situation of this graph is:"<<endl;
 	for (i = 0; i < nodeNumber; i++) {
 	   for (j = 0; j < nodeNumber; j++) {

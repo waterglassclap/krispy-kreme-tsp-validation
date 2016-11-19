@@ -7,7 +7,7 @@ using namespace std;
 
 typedef struct IndiceDiff {
     int n;
-    deque<int>* diffHistories;
+    int* diffInfo;
 } IndiceDiff;
 
 #endif
