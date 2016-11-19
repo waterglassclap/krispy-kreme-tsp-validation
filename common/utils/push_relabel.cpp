@@ -159,8 +159,8 @@ void PushRelabel::mineMaxFlow() {
 		 	flag = push(current, target);
 		}
 	}
-	printInfo();
-	cin.ignore();
+	//printInfo();
+	//cin.ignore();
 }
 
 

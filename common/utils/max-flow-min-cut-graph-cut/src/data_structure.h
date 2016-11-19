@@ -20,7 +20,6 @@ struct Vertex{
 };
 
 struct Graph{
-
     vector<Vertex> vertices;
     unordered_map<string, Edge> edges;
     double flow;

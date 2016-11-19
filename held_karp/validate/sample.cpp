@@ -1,67 +1,70 @@
 
 #include <math.h>
 #include "../../common/utils/common_util.h"
-#include "../../common/utils/push_relabel.h"
+//#include "../../common/utils/push_relabel.h"
 
-using namespace std;
+#include "../../common/utils/max-flow-min-cut-graph-cut/src/mincut_util.h"
+//#include "../../common/utils/push_relabel.h"
 
-typedef struct ErrorInfo {
-	MinCutInfo minCutInfo;
-	float severity;
-	bool isValid;
-} ErrorInfo;
+ using namespace std;
 
-typedef struct ErrorInfos {
-	struct ErrorInfo* infos;
-	int num;
-} ErrorInfos;
+// typedef struct ErrorInfo {
+// 	MinCutInfo minCutInfo;
+// 	float severity;
+// 	bool isValid;
+// } ErrorInfo;
 
-struct ErrorInfo getStErrorInfo(int s, int t, int n, float** inputGraph) {
-	ErrorInfo errorInfo;
-	errorInfo.isValid = false;
+// typedef struct ErrorInfos {
+// 	struct ErrorInfo* infos;
+// 	int num;
+// } ErrorInfos;
 
-	PushRelabel verifier(s, t, n, inputGraph);
-	MinCutInfo mci = verifier.getMinCutInfo();
-	if (!over(mci.totalFlow, 1.0f)) {
-		errorInfo.isValid = true;
-		errorInfo.minCutInfo = mci;
-		errorInfo.severity = 1.0f - mci.totalFlow;
-	}
-    verifier.freeVars();
-	return errorInfo;
-}
+// struct ErrorInfo getStErrorInfo(int s, int t, int n, float** inputGraph) {
+// 	ErrorInfo errorInfo;
+// 	errorInfo.isValid = false;
+
+// 	PushRelabel verifier(s, t, n, inputGraph);
+// 	MinCutInfo mci = verifier.getMinCutInfo();
+// 	if (!over(mci.totalFlow, 1.0f)) {
+// 		errorInfo.isValid = true;
+// 		errorInfo.minCutInfo = mci;
+// 		errorInfo.severity = 1.0f - mci.totalFlow;
+// 	}
+//     verifier.freeVars();
+// 	return errorInfo;
+// }
 
 
-struct ErrorInfos getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
-	ErrorInfos errorInfos;
-	errorInfos.infos = new ErrorInfo[n];
-	errorInfos.num = 0;
+// struct ErrorInfos getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
+// 	ErrorInfos errorInfos;
+// 	errorInfos.infos = new ErrorInfo[n];
+// 	errorInfos.num = 0;
 
-	if (s == t) {
-	    throw runtime_error("s should not be equal to t. terminate.");
-	}
+// 	if (s == t) {
+// 	    throw runtime_error("s should not be equal to t. terminate.");
+// 	}
 
-	float** mergedGraph = getMergedGraph(s, t, n, inputGraph);
+// 	float** mergedGraph = getMergedGraph(s, t, n, inputGraph);
 
-    for (int i = 0; i < n - 1; i++) {
-    	if (i != s) {
-    		PushRelabel verifier(0, i, n - 1, mergedGraph);
-    		MinCutInfo mci = verifier.getMinCutInfo();
-            if (!over(mci.totalFlow, 2.0f)) {
-				errorInfos.infos[errorInfos.num].minCutInfo = mci;
-				errorInfos.infos[errorInfos.num].severity = 2.0f - mci.totalFlow;
-				errorInfos.num++;
-			}
-            verifier.freeVars();
-    	}
-    }
-    //for (int i = 0; i < n; i++) {
-    //    delete[] mergedGraph[i];
-    //}
-    //delete mergedGraph;
-    //free2dArr(n, mergedGraph);
-    return errorInfos;
-}
+//     for (int i = 0; i < n - 1; i++) {
+//     	if (i != s) {
+//     		PushRelabel verifier(0, i, n - 1, mergedGraph);
+//     		MinCutInfo mci = verifier.getMinCutInfo();
+//             if (!over(mci.totalFlow, 2.0f)) {
+// 				errorInfos.infos[errorInfos.num].minCutInfo = mci;
+// 				errorInfos.infos[errorInfos.num].severity = 2.0f - mci.totalFlow;
+// 				errorInfos.num++;
+// 			}
+//             verifier.freeVars();
+//     	}
+//     }
+//     //for (int i = 0; i < n; i++) {
+//     //    delete[] mergedGraph[i];
+//     //}
+//     //delete mergedGraph;
+//     //free2dArr(n, mergedGraph);
+//     return errorInfos;
+// }
 /*
 int main() {
 	int s = 0, t = 5;
@@ -379,8 +382,9 @@ int main (int argc, char **argv)
     solution[2][28] = 1;
     solution[25][28] = 1;
     
-    ErrorInfo stErrorInfo = getStErrorInfo(start_node, end_node, 29, solution);
-    ErrorInfos nonStErrorInfos = getNonStErrorInfos(start_node, end_node, 29, solution);
+    MincutUtil mincutUtil;
+    ErrorInfo stErrorInfo = mincutUtil.getStErrorInfo(start_node, end_node, 29, solution);
+    ErrorInfos nonStErrorInfos = mincutUtil.getNonStErrorInfos(start_node, end_node, 29, solution);
     
     ErrorInfo maxErrorInfo;
     maxErrorInfo.severity = -1;
