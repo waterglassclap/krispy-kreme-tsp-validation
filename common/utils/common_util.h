@@ -7,6 +7,7 @@ const float ERROR_TOLERANCE = 1e-9;
 
 bool over(float value, float boundary);
 bool exceed(float value, float boundary);
+bool roughly_equal(float value, float boundary);
 // merged node will be 0
 float** getMergedGraph(int s, int t, int n, float** inputGraph);
 template <typename T> void free2dArr(int n, T** inputGraph) {

@@ -12,8 +12,10 @@ MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, float** inputGraph) {
     }
     initVertices(g);
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            addSingleEdge(g, i, j, inputGraph[i][j]);    
+        for (int j = i; j < n; j++) {
+            if (i != j) {
+                addSingleEdge(g, i, j, inputGraph[i][j], inputGraph[j][i]); 
+            }   
         }
     }
     double max_flow = pushRelabel(g, s, t);
@@ -47,6 +49,15 @@ MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, float** inputGraph) {
         minCutInfo.edgeInfos[i].sink = min_cut[i]._to;
         minCutInfo.edgeInfos[i].weight = inputGraph[min_cut[i]._from][min_cut[i]._to];
     }
+    for (int i = 0; i < g.vertices.size(); i++) {
+        // for (int j = 0; j < g.vertices[i].adj_edges.size(); j++) {
+        //      delete g.vertices[i].adj_edges[j];
+        // }
+        g.vertices[i].adj_edges.clear();
+    }
+    min_cut.clear();
+    g.vertices.clear();
+    g.edges.clear();
     return minCutInfo;
 }
 
@@ -63,8 +74,6 @@ ErrorInfo MincutUtil::getStErrorInfo(int s, int t, int n, float** inputGraph) {
         errorInfo.minCutInfo = mci;
         errorInfo.severity = 1.0f - mci.totalFlow;
     }
-    // TODO : free vars;
-    //verifier.freeVars();
     return errorInfo;
 }
 
@@ -83,15 +92,12 @@ struct ErrorInfos MincutUtil::getNonStErrorInfos(int s, int t, int n, float** in
         if (i != s) {
             // PushRelabel verifier(0, i, n - 1, mergedGraph);
             // MinCutInfo mci = verifier.getMinCutInfo();
-            MinCutInfo mci = getMinCutInfo(s, t, n, mergedGraph);
+            MinCutInfo mci = getMinCutInfo(s, t, n - 1, mergedGraph);
             if (!over(mci.totalFlow, 2.0f)) {
                 errorInfos.infos[errorInfos.num].minCutInfo = mci;
                 errorInfos.infos[errorInfos.num].severity = 2.0f - mci.totalFlow;
                 errorInfos.num++;
             }
-
-            // TODO : free vars;
-            //verifier.freeVars();
         }
     }
     //for (int i = 0; i < n; i++) {

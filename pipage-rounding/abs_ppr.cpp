@@ -1,7 +1,5 @@
 #include "abs_ppr.h"
 
-// TODO : float error, 1e-9 handling
-
 void printPprAns(PprAns* pprAns) {
     cout << "====target y===="<< endl;
     for (int i = 0; i < pprAns->n; i++) {
@@ -92,7 +90,7 @@ AbsPpr::AbsPpr() {
 bool AbsPpr::isIntegral(PprAns* ans) {
     for (int i = 0; i < ans->n; i++) {
         for (int j = 0; j < ans->n; j++) {
-            if (static_cast<int>(ans->sol[i][j]) != ans->sol[i][j]) {
+            if (!roughly_equal(static_cast<int>(ans->sol[i][j]), ans->sol[i][j])) {
                 return false;
             }
         }
@@ -161,7 +159,7 @@ EdgeInfo* AbsPpr::pullEdge(PprAns* ans) {
     for (int i = 0; i < ans->n; i++) {
         for (int j = 0; j < ans->n; j++) {
             if (ans->T[i][j] && ans->T[j][i]
-                && (static_cast<int>(ans->sol[i][j]) != ans->sol[i][j])) { // TODO : is this correct?
+                && !roughly_equal(static_cast<int>(ans->sol[i][j]), ans->sol[i][j])) { // TODO : is this correct?
                 edge->source = i;
                 edge->sink = j;
                 edge->weight = ans->sol[i][j];
@@ -366,6 +364,7 @@ PprAns* AbsPpr::hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
 
 void AbsPpr::pipageRound(PprAns* targetAns) {
     while (!isIntegral(targetAns)) {
+        //printPprAns(targetAns);
         initializeTightSet(targetAns);
         while (true) {
             EdgeInfo* i = pullEdge(targetAns);
@@ -377,7 +376,8 @@ void AbsPpr::pipageRound(PprAns* targetAns) {
             }
             PprAns* incAns = hitConstraint(targetAns, i, j);
             PprAns* decAns = hitConstraint(targetAns, j, i);
-            updateSol(targetAns, incAns, decAns);    
+            updateSol(targetAns, incAns, decAns);
+
         }
     }
     printPprAns(targetAns);
