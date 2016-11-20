@@ -230,6 +230,7 @@ double pushRelabel(Graph &g, int source_id, int sink_id){
         push(g, source_id, i);
     }
     int counter = 0;
+    int iter = 0;
     while(1){
         if(counter >= g.vertices.size() - 2) break;
         int u = List[counter];
@@ -239,7 +240,10 @@ double pushRelabel(Graph &g, int source_id, int sink_id){
             moveToFront(List, counter);
             counter = 0;
         }else ++ counter;
+        iter++;
     }
+    
+    cout << sink_id << " iter --> " << iter << endl;
 
     double maxFlow = 0.0;
 

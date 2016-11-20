@@ -1,87 +1,79 @@
 #include "column_generation.h"
 
-void column_generation(int n, double** cost, double** x) {
+bool** column_generation(int n, double** cost, double** x) {
+    bool** spanningTree;
     IloEnv env;
-    IloModel model(env);
     
-    IloArray<IloNumVarArray> s(env, n); // Slack Variables
-    IloNumVarArray y(env); // Possibility of each spanning tree (convex combination)
-    IloArray<IloRangeArray> constraints(env, n*(n-1)/2); // Constraints
-    std::stringstream name; // variable and constraint names
-    
-    // Create variables s with Variable Constraints
-    for(int i = 0; i < n; ++i) {
-        s[i] = IloNumVarArray(env, n);
-        for(int j = i+1; j < n; ++j) {
-            name << "s_" << i << "_" << j;
-            s[i][j] = IloNumVar(env, 0, IloInfinity, ILOFLOAT, name.str().c_str()); // 0 <= s_i_j
-            name.str(""); // clean name
-        }
-    }
-    
-    // Slack Constraints
-    for(int i = 0; i < n; ++i) {
-        constraints[i] = IloRangeArray(env, n);
-        for(int j = i+1; j < n; ++j) {
-            name << "slack_" << i << "_" << j;
-            constraints[i][j] = IloRange(env, x[i][j], s[i][j], x[i][j], name.str().c_str());
-            name.str("");
-        }
-        name.str(""); // Clean name
+    try {
         
-        model.add(constraints[i]);
-    }
-    
-    // Objective Function
-    IloExpr expr(env);
-    
-    for(int i = 0; i < n; ++i) {
-        for(int j = i+1; j < n; ++j) {
-            expr += s[i][j];
-        }
-    }
-    IloObjective obj(env, expr, IloObjective::Minimize);
-    
-    // Add object function to model
-    model.add(obj);
-    
-    expr.end();
-    
-    // LP solver object
-    IloCplex cplex(model);
-    
-    // Solve with dual simplex
-    cplex.setParam(IloCplex::RootAlg, IloCplex::Primal);
-    
-    int iter = 0; // for debug
-    while(1) {
-        // Export model to file
-        cplex.exportModel("column_generation.lp");
+        IloModel model(env);
         
-        bool solved = false;
+        IloArray<IloNumVarArray> s(env, n); // Slack Variables
+        IloNumVarArray y(env); // Possibility of each spanning tree (convex combination)
+        IloArray<IloRangeArray> constraints(env, n*(n-1)/2); // Constraints
+        std::stringstream name; // variable and constraint names
         
-        try {
-            solved = cplex.solve();
-        } catch(const IloException& e) {
-            std::cerr << std::endl << std::endl;
-            std::cerr << "CPLEX Raised an exception:" << std::endl;
-            std::cerr << e << std::endl;
-            env.end();
-            throw;
-        }
-        
-        if(solved) {
-            // dual graph to get Maximum Spanning Tree
-            double **dualGraph = new double*[n];
-            bool **maxSpan = new bool*[n];
-            for(int i=0; i<n; i++) {
-                dualGraph[i] = new double[n];
-                maxSpan[i] = new bool[n];
-                for (int j = 0; j < n; ++j) {
-                    dualGraph[i][j] = 0;
-                    maxSpan[i][j] = false;
-                }
+        // Create variables s with Variable Constraints
+        for(int i = 0; i < n; ++i) {
+            s[i] = IloNumVarArray(env, n);
+            for(int j = i+1; j < n; ++j) {
+                name << "s_" << i << "_" << j;
+                s[i][j] = IloNumVar(env, 0, IloInfinity, ILOFLOAT, name.str().c_str()); // 0 <= s_i_j
+                name.str(""); // clean name
             }
+        }
+        
+        // Slack Constraints
+        for(int i = 0; i < n; ++i) {
+            constraints[i] = IloRangeArray(env, n);
+            for(int j = i+1; j < n; ++j) {
+                name << "slack_" << i << "_" << j;
+                constraints[i][j] = IloRange(env, x[i][j], s[i][j], x[i][j], name.str().c_str());
+                name.str("");
+            }
+            name.str(""); // Clean name
+            
+            model.add(constraints[i]);
+        }
+        
+        // Objective Function
+        IloExpr expr(env);
+        
+        for(int i = 0; i < n; ++i) {
+            for(int j = i+1; j < n; ++j) {
+                expr += s[i][j];
+            }
+        }
+        IloObjective obj(env, expr, IloObjective::Minimize);
+        
+        // Add object function to model
+        model.add(obj);
+        
+        expr.end();
+
+        // LP solver object
+        IloCplex cplex(model);
+        
+        // Solve with dual simplex
+        cplex.setParam(IloCplex::RootAlg, IloCplex::Primal);
+        
+        int iter = 0; // for debug
+        vector<bool**> spanningTrees;
+        
+        while(1) {
+            // Export model to file
+            cplex.exportModel("column_generation.lp");
+            
+            if( !cplex.solve() ) {
+                cerr << "Failed to optimize Column Generation" << endl;
+                cerr << "Status: " << cplex.getStatus() << endl;
+                cerr << "Solver status: " << cplex.getCplexStatus() << endl;
+                throw;
+            }
+            
+            // dual graph to get Maximum Spanning Tree
+            double** dualGraph = create2dArr<double>(n, 0);
+            bool** maxSpan = create2dArr<bool>(n, false);
             
             // get weight by -dual
             IloNum dual;
@@ -96,10 +88,9 @@ void column_generation(int n, double** cost, double** x) {
             }
             
             if(getMST(dualGraph, maxSpan, n) >= -1e-9) {
-                std::cout << "Cplex success at " << iter << " time" << std::endl;
-                std::cout << "\tStatus: " << cplex.getStatus() << std::endl;
-                std::cout << "\tObjective value: " << cplex.getObjValue() << std::endl;
-                
+                std::cout << "Column Generation success at " << iter << " time" << std::endl;
+                std::cout << "Status: " << cplex.getStatus() << std::endl;
+                std::cout << "Objective value: " << cplex.getObjValue() << std::endl;
                 break;
             } else {
                 IloNumColumn col = obj(0);
@@ -115,28 +106,29 @@ void column_generation(int n, double** cost, double** x) {
                 name.str("");
                 col.end();
                 
-                cout << endl << "column y "<< iter << " is" << endl;
-                for (int i=0; i<n; i++) {
-                    for (int j=i+1; j<n; j++) {
-                        cout << i << "-" << j << ": " << maxSpan[i][j] << endl;
-                    }
-                }
+                spanningTrees.push_back(maxSpan);
             }
-        } else {
-            std::cerr << "Cplex error!" << std::endl;
-            std::cerr << "\tStatus: " << cplex.getStatus() << std::endl;
-            std::cerr << "\tSolver status: " << cplex.getCplexStatus() << std::endl;
-            throw;
+            
+            iter++;
         }
         
-        iter++;
-    }
-    
-    for (int i=0; i<iter; i++) {
-        cout << "\ty_" << i << ": " << cplex.getValue(y[i]) << endl;
+        double probability = 0;
+        for (int i=0; i<iter; i++) {
+            if(cplex.getValue(y[i]) > probability) {
+                probability = cplex.getValue(y[i]);
+                spanningTree = spanningTrees[i];
+            }
+        }
+        
+    } catch (IloException& e) {
+        cerr << "Concert exception caught: " << e << endl;
+    } catch (...) {
+        cerr << "Unknown exception caught" << endl;
     }
     
     env.end();
+    
+    return spanningTree;
 }
 
 double getMST(double** graph, bool** maxSpan, int n) {
@@ -170,12 +162,9 @@ double getMST(double** graph, bool** maxSpan, int n) {
     }
     
     double sum_weight = 0;
-    // print the constructed MST
-    cout << "Edge   Weight" << endl; // TODO : Deprecated! for debug
+    
     for (int i = 1; i < n; i++){
-        cout << parent[i] << " - " << i << "    " << graph[i][parent[i]] << endl; // TODO : Deprecated! for debug
         sum_weight += graph[i][parent[i]];
-        
         i < parent[i] ? maxSpan[i][parent[i]] = true : maxSpan[parent[i]][i] = true;
     }
     return sum_weight;

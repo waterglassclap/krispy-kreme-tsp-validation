@@ -11,11 +11,12 @@ ILOSTLBEGIN
 double** held_karp_lp(int n, double** cost);
 bool check_validation(const IloEnv& env, const IloCplex& cplex, const IloModel& model, const IloArray<IloNumVarArray>& x, std::stringstream& name, int n);
 void stDivider(int s, int t, MinCutInfo* mergedInfo);
+bool isSpanningTree(bool** tree, int n);
 
-const int start_node = 3, end_node = 5;
+const int start_node = 8, end_node = 42;
 
 int main (int argc, char **argv) {
-    const char* filename  = "/Users/ttopre/Downloads/a280.txt";
+    const char* filename  = "/Users/ttopre/Downloads/brazil58.txt";
     ifstream file(filename);
     if (!file) {
         cerr << "ERROR: could not open file '" << filename
@@ -65,8 +66,23 @@ int main (int argc, char **argv) {
     }
     //////////////////
     
-    cout << "츄카해" << endl;
-    column_generation(node_num, full_weight_matrix, held_karp_optimal);
+    cout << "츄카해";
+    
+    bool** spanningTree = column_generation(node_num, full_weight_matrix, held_karp_optimal);
+    
+    if(isSpanningTree(spanningTree, node_num)) {
+        cout << " spanning tree" << endl;
+    } else {
+        cout << " not spanning" << endl;
+    }
+    
+    for (int i=0; i<n; i++) {
+        for (int j=i+1; j<n; j++) {
+            if(spanningTree[i][j]) {
+                cout << i << "-" << j << ": " << spanningTree[i][j] << endl;
+            }
+        }
+    }
     
     return 0;
 }
@@ -140,13 +156,13 @@ double** held_karp_lp(int n, double** cost) {
             cplex.exportModel("newmodel.lp");
             
             if( !cplex.solve() ) {
-                cerr << "Failed to optimize LP" << endl;
+                cerr << "Failed to optimize Held Karp Relaxation" << endl;
                 cerr << "Status: " << cplex.getStatus() << endl;
                 cerr << "Solver status: " << cplex.getCplexStatus() << endl;
                 return 0;
             }
             
-            cout << "Cplex success at " << iter << " time" << endl;
+            cout << "Held-Karp success at " << iter << " time" << endl;
             cout << "Status: " << cplex.getStatus() << endl;
             cout << "Objective value: " << cplex.getObjValue() << endl;
             if(!check_validation(env, cplex, model, x, name, n)) {
@@ -307,4 +323,27 @@ void stDivider(int s, int t, MinCutInfo* mergedInfo) {
     
     delete [] mergedInfo->edgeInfos;
     mergedInfo->edgeInfos = newEdgeInfos;
+}
+
+bool isSpanningTree(bool** tree, int n) {
+    int edge_num = 0;
+    vector<int> vertex;
+    
+    for(int i = 0; i < n; ++i) {
+        for(int j = 0; j < n; ++j) {
+            if(tree[i][j]) {
+                vertex.push_back(i);
+                vertex.push_back(j);
+                edge_num++;
+            }
+        }
+    }
+    
+    sort(vertex.begin(), vertex.end());
+    vertex.erase(unique(vertex.begin(), vertex.end()), vertex.end());
+    
+    if (vertex.size() == n && edge_num == n-1) {
+        return true;
+    }
+    return false;
 }
