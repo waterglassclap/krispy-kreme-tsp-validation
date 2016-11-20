@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D7B136FC1DC5C22D00F7B851"
-               BuildableName = "cplex"
-               BlueprintName = "cplex"
-               ReferencedContainer = "container:cplex.xcodeproj">
+               BlueprintIdentifier = "D7E71A911DE0B7AC00BC3577"
+               BuildableName = "best-of-many"
+               BlueprintName = "best-of-many"
+               ReferencedContainer = "container:best-of-many.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D7B136FC1DC5C22D00F7B851"
-            BuildableName = "cplex"
-            BlueprintName = "cplex"
-            ReferencedContainer = "container:cplex.xcodeproj">
+            BlueprintIdentifier = "D7E71A911DE0B7AC00BC3577"
+            BuildableName = "best-of-many"
+            BlueprintName = "best-of-many"
+            ReferencedContainer = "container:best-of-many.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,18 +55,13 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D7B136FC1DC5C22D00F7B851"
-            BuildableName = "cplex"
-            BlueprintName = "cplex"
-            ReferencedContainer = "container:cplex.xcodeproj">
+            BlueprintIdentifier = "D7E71A911DE0B7AC00BC3577"
+            BuildableName = "best-of-many"
+            BlueprintName = "best-of-many"
+            ReferencedContainer = "container:best-of-many.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
-         <AdditionalOption
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "YES">
-         </AdditionalOption>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
@@ -79,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D7B136FC1DC5C22D00F7B851"
-            BuildableName = "cplex"
-            BlueprintName = "cplex"
-            ReferencedContainer = "container:cplex.xcodeproj">
+            BlueprintIdentifier = "D7E71A911DE0B7AC00BC3577"
+            BuildableName = "best-of-many"
+            BlueprintName = "best-of-many"
+            ReferencedContainer = "container:best-of-many.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

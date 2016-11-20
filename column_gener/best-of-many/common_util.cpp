@@ -1,17 +1,17 @@
 #include "common_util.h"
 
-bool over(float value, float boundary) {
+bool over(double value, double boundary) {
 	return (value + ERROR_TOLERANCE >= boundary);
 }
 
 
-bool exceed(float value, float boundary) {
+bool exceed(double value, double boundary) {
 	return (value + ERROR_TOLERANCE > boundary);
 }
 
 // TODO : check if it is correct
-float** getMergedGraph(int s, int t, int n, float** inputGraph) {
-	float** mergedGraph = create2dArr<float>(n - 1, 0.0f);
+double** getMergedGraph(int s, int t, int n, double** inputGraph) {
+	double** mergedGraph = create2dArr<double>(n - 1, 0.0f);
 
 	int newRow = 1;
 	for (int originalRow = 0; originalRow < n; originalRow++) {
@@ -29,7 +29,9 @@ float** getMergedGraph(int s, int t, int n, float** inputGraph) {
 				currentCol = newCol;
 				newCol++;
 			}
-			mergedGraph[currentRow][currentCol] += inputGraph[originalRow][originalCol];
+			if (currentRow != currentCol) {
+				mergedGraph[currentRow][currentCol] += inputGraph[originalRow][originalCol];
+			}
 		}
 	}
 	

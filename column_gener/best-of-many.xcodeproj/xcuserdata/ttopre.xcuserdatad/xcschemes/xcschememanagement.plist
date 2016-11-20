@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>cplex.xcscheme</key>
+		<key>best-of-many.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,7 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>D7B136FC1DC5C22D00F7B851</key>
+		<key>D7E71A911DE0B7AC00BC3577</key>
 		<dict>
 			<key>primary</key>
 			<true/>

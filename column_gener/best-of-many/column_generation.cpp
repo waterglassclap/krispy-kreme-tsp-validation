@@ -1,6 +1,6 @@
 #include "column_generation.h"
 
-void column_generation(int n, float** cost, float** x) {
+void column_generation(int n, double** cost, double** x) {
     IloEnv env;
     IloModel model(env);
     
@@ -72,10 +72,10 @@ void column_generation(int n, float** cost, float** x) {
         
         if(solved) {
             // dual graph to get Maximum Spanning Tree
-            float **dualGraph = new float*[n];
+            double **dualGraph = new double*[n];
             bool **maxSpan = new bool*[n];
             for(int i=0; i<n; i++) {
-                dualGraph[i] = new float[n];
+                dualGraph[i] = new double[n];
                 maxSpan[i] = new bool[n];
                 for (int j = 0; j < n; ++j) {
                     dualGraph[i][j] = 0;
@@ -139,10 +139,10 @@ void column_generation(int n, float** cost, float** x) {
     env.end();
 }
 
-float getMST(float** graph, bool** maxSpan, int n) {
+double getMST(double** graph, bool** maxSpan, int n) {
     // Get MST using Prim Algorithm
     int parent[n]; // constructed MST vertex
-    float key[n];   // Picked Edge's weight
+    double key[n];   // Picked Edge's weight
     bool mstSet[n];  // included vertice
     
     // Initialize as INFINITE
@@ -154,7 +154,7 @@ float getMST(float** graph, bool** maxSpan, int n) {
     
     for (int i = 0; i < n-1; i++) {
         // Pick minimum key vertex that not yet include in mstSet
-        float min = MAXFLOAT;
+        double min = MAXFLOAT;
         int min_index = 0;
         
         for (int v = 0; v < n; v++)
@@ -165,11 +165,11 @@ float getMST(float** graph, bool** maxSpan, int n) {
         
         // set key value of vertex which is adjacent min_index
         for (int v = 0; v < n; v++)
-            if (graph[min_index][v] != 0 && mstSet[v] == false && graph[min_index][v] < key[v]) /////////graph[min_index][v] != 0 조건 넣어야 할까?
+            if (graph[min_index][v] != 0 && mstSet[v] == false && graph[min_index][v] < key[v])
                 parent[v]  = min_index, key[v] = graph[min_index][v];
     }
     
-    float sum_weight = 0;
+    double sum_weight = 0;
     // print the constructed MST
     cout << "Edge   Weight" << endl; // TODO : Deprecated! for debug
     for (int i = 1; i < n; i++){

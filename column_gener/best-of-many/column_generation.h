@@ -8,7 +8,7 @@
 using namespace std;
 
 // column_generation
-void column_generation(int n, float** cost, float** x);
-float getMST(float** graph, bool** maxSpan, int n);
+void column_generation(int n, double** cost, double** x);
+double getMST(double** graph, bool** maxSpan, int n);
 
 #endif /* column_generation_h */
