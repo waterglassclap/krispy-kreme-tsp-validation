@@ -4,7 +4,7 @@
 #include <math.h>
 #include "common_util.h"
 #include "edge_info.h"
-#include "general_settings.h"
+#include "push_relabel.h"
 
 typedef struct MinCutInfo {
 	int* heights;

@@ -5,29 +5,17 @@ MincutUtil::MincutUtil() {
 }
 
 MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, double** inputGraph) {
-    Graph g;
-    // get min cut
-    for(int i = 0; i < n; i++){
-        addVertex(g);
-    }
-    initVertices(g);
-    for (int i = 0; i < n; i++) {
-        for (int j = i; j < n; j++) {
-            if (i != j) {
-                addSingleEdge(g, i, j, inputGraph[i][j], inputGraph[j][i]);
-            }
-        }
-    }
-    double max_flow = pushRelabel(g, s, t);
-    vector<Edge> min_cut = getMinCut(g, s);
+    
+    Graph g(n, s, t, inputGraph);
+    
+    double max_flow = g.pushRelabel();
+    vector<EdgeInfo> min_cut = g.getMinCut(s);
+    cout << "ST: " << s << " " << t << " / max: " << max_flow << " / mincut: " << min_cut.size() << endl;
     
     // build mincut info
     MinCutInfo minCutInfo;
     minCutInfo.nodeNum = n;
-    minCutInfo.heights = new int[n];
-    for (int i = 0; i < n; i++) {
-        minCutInfo.heights[i] = getHeight(g, i);
-    }
+    minCutInfo.heights = g.getHeight();
     for (int i = 0; i < n; i++) {
         bool isPresent = false;
         for (int j = 0; j < n; j++) {
@@ -45,15 +33,10 @@ MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, double** inputGraph) {
     minCutInfo.totalFlow = max_flow;
     minCutInfo.edgeInfos = new EdgeInfo[minCutInfo.size];
     for (int i = 0; i < minCutInfo.size; i++) {
-        minCutInfo.edgeInfos[i].source = min_cut[i]._from;
-        minCutInfo.edgeInfos[i].sink = min_cut[i]._to;
-        minCutInfo.edgeInfos[i].weight = inputGraph[min_cut[i]._from][min_cut[i]._to];
+        minCutInfo.edgeInfos[i] = min_cut[i];
     }
-    for (int i = 0; i < g.vertices.size(); i++) {
-        g.vertices[i].adj_edges.clear();
-    }
-    g.vertices.clear();
-    g.edges.clear();
+    
+    g.freeGraph();
     return minCutInfo;
 }
 
@@ -91,6 +74,8 @@ struct ErrorInfos MincutUtil::getNonStErrorInfos(int s, int t, int n, double** i
             errorInfos.infos[errorInfos.num].minCutInfo = mci;
             errorInfos.infos[errorInfos.num].severity = 2.0f - mci.totalFlow;
             errorInfos.num++;
+            if(mci.totalFlow == 0)
+                break;
         }
     }
     

@@ -13,10 +13,10 @@ bool check_validation(const IloEnv& env, const IloCplex& cplex, const IloModel& 
 void stDivider(int s, int t, MinCutInfo* mergedInfo);
 bool isSpanningTree(bool** tree, int n);
 
-const int start_node = 8, end_node = 42;
+const int start_node = 3, end_node = 5;
 
 int main (int argc, char **argv) {
-    const char* filename  = "/Users/ttopre/Downloads/brazil58.txt";
+    const char* filename  = "/Users/ttopre/Downloads/bier127.txt";
     ifstream file(filename);
     if (!file) {
         cerr << "ERROR: could not open file '" << filename
@@ -149,7 +149,7 @@ double** held_karp_lp(int n, double** cost) {
         
         // Solve with dual simplex
         cplex.setParam(IloCplex::RootAlg, IloCplex::Dual);
-
+        
         int iter = 0; // for debug
         while(1) {
             // Export model to file

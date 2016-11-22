@@ -2,4 +2,100 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "best-of-many/mincut_util.cpp"
+            timestampString = "501512865.699205"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "best-of-many/mincut_util.cpp"
+            timestampString = "501512865.699205"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "MincutUtil::getMinCutInfo(int s, int t, int n, double** inputGraph)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MincutUtil::getMinCutInfo(int, int, int, double**)"
+                  moduleName = "best-of-many"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ttopre/CPP/%E1%84%86%E1%85%A1%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AF%20%E1%84%91%E1%85%AE%E1%84%89%E1%85%B5%E1%84%85%E1%85%B5%E1%86%AF%E1%84%85%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%87%E1%85%B3%E1%86%AF%20%E1%84%89%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B3/best-of-many/mincut_util.cpp"
+                  timestampString = "501505777.731162"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "202">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MincutUtil::getMinCutInfo(int, int, int, double**)"
+                  moduleName = "best-of-many"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ttopre/CPP/%E1%84%86%E1%85%A1%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AF%20%E1%84%91%E1%85%AE%E1%84%89%E1%85%B5%E1%84%85%E1%85%B5%E1%86%AF%E1%84%85%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%87%E1%85%B3%E1%86%AF%20%E1%84%89%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B3/best-of-many/mincut_util.cpp"
+                  timestampString = "501505777.733539"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "558">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "best-of-many/main.cpp"
+            timestampString = "501505618.205103"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
+            landmarkName = "check_validation(const IloEnv&amp; env, const IloCplex&amp; cplex, const IloModel&amp; model, const IloArray&lt;IloNumVarArray&gt;&amp; x, std::stringstream&amp; name, int n)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "best-of-many/mincut_util.cpp"
+            timestampString = "501512865.699205"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
+            landmarkName = "MincutUtil::getMinCutInfo(int s, int t, int n, double** inputGraph)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
