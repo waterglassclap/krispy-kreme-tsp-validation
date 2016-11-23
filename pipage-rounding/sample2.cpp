@@ -49,6 +49,8 @@ void writePprAnsToFile(PprAns* targetAns) {
 }
 
 int main() {
+    srand(time(NULL));
+
     PprAns* targetAns = readInputFromFile();
     RandomizedPpr rppr = RandomizedPpr();
     rppr.pipageRound(targetAns);

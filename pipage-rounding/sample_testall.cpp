@@ -48,7 +48,9 @@ void writePprAnsToFile(PprAns* targetAns, string outputFilename) {
     outfile.close();
 }
 
+// TODO : to more random seed! not time..?
 int main() {
+    srand(time(NULL));
     
     glob_t inputList;
     glob("inputs/*", GLOB_TILDE, NULL, &inputList);

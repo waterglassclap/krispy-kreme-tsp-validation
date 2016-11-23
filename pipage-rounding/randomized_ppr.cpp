@@ -45,7 +45,6 @@ void RandomizedPpr::updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns)
 
     // get probability p by vector diff sizes
     p = probNumerator / probDenominator;
-    srand(time(NULL));
     double r = (double) (rand() % 1000) / 1000; // 0.0 to 1.0
     //double r = 0.5f;
 

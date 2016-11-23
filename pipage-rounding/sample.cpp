@@ -3,6 +3,8 @@
 using namespace std;
 
 int main() {
+    srand(time(NULL));
+
     PprAns* targetAns = new PprAns;
 
     targetAns->n = 6;
