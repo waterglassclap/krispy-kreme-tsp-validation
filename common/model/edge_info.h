@@ -4,7 +4,7 @@
 typedef struct EdgeInfo {
 	int source;
 	int sink;
-	float weight;
+	double weight;
 } EdgeInfo;
 
 #endif
