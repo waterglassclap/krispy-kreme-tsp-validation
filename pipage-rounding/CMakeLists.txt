@@ -16,7 +16,8 @@ set(SOURCE
   ${CMAKE_CURRENT_SOURCE_DIR}/abs_ppr.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/randomized_ppr.cpp
 #  ${CMAKE_CURRENT_SOURCE_DIR}/sample.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/sample2.cpp
+#   ${CMAKE_CURRENT_SOURCE_DIR}/sample2.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/sample_testall.cpp
 )
 
 set(SOURCE
