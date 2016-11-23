@@ -27,11 +27,12 @@ public:
     bool isIntegral(PprAns* ans);
     void initializeTightSet(PprAns* ans);
     EdgeInfo* pullEdge(PprAns* ans);
+    EdgeInfo* pullEdge(PprAns* ans, EdgeInfo* noDupEdge);
     bool* getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
     double getConstraintDelta(bool* minsetA, PprAns* prevAns);
     PprAns* hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
     virtual void updateSol(PprAns* targetAns, PprAns* incAns, PprAns* decAns) = 0;
-    TwoDGraph<double>* getValidationGraph(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j);
+    TwoDGraph<double>* getValidationGraph(PprAns* prevAns);
     void pipageRound(PprAns* targetAns);
 };
 

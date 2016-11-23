@@ -4,7 +4,7 @@
 
 using namespace std;
 
-char FILENAME[50] = "2.txt";
+char FILENAME[50] = "280.txt";
 
 PprAns* readInputFromFile() {
     int s, t, a, b;
@@ -27,10 +27,6 @@ PprAns* readInputFromFile() {
         targetAns->sol[i][i] = 0.0f;
     }
 
-    targetAns->minsetA = new bool[targetAns->n];
-    for (int i = 0; i < targetAns->n; i++) {
-        targetAns->minsetA[i] = true;
-    }
     targetAns->T = create2dArr<bool>(targetAns->n, true);
 
     return targetAns;

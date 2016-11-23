@@ -2,7 +2,7 @@
 
 void printPprAns(PprAns* pprAns) {
     int edgeCounter = 0;
-    cout << "====target y===="<< endl;
+    cout << "====target y====" << endl;
     for (int i = 0; i < pprAns->n; i++) {
         for (int j = 0; j <pprAns->n; j++) {
             cout << pprAns->sol[i][j] << " ";
@@ -13,20 +13,28 @@ void printPprAns(PprAns* pprAns) {
         cout << endl;
     }
     cout << "edges : " << edgeCounter << endl;
-    cout << "====target T===="<< endl;
-    for (int i = 0; i < pprAns->n; i++) {
-        for (int j = 0; j < pprAns->n; j++) {
-            cout << pprAns->T[i][j] << " ";
+    // cout << "====target T===="<< endl;
+    // for (int i = 0; i < pprAns->n; i++) {
+    //     for (int j = 0; j < pprAns->n; j++) {
+    //         cout << pprAns->T[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+}
+
+void printDouble2DGraph(TwoDGraph<double>* inputGraph) {
+    for (int i = 0; i < inputGraph->n; i++) {
+        for (int j = 0; j <inputGraph->n; j++) {
+            cout << inputGraph->set[i][j] << " ";
         }
         cout << endl;
     }
 }
 
-void printDouble2DGraph(TwoDGraph<double>* inputGraph) {
-    cout << "====2d graph===="<< endl;
-    for (int i = 0; i < inputGraph->n; i++) {
-        for (int j = 0; j <inputGraph->n; j++) {
-            cout << inputGraph->set[i][j] << " ";
+void printDouble2DArray(int n, double** inputGraph) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << inputGraph[i][j] << "\t";
         }
         cout << endl;
     }
@@ -58,15 +66,6 @@ IndiceDiff* getIndiceDiffCopy(IndiceDiff* inputIndiceDiff) {
 }
 
 void mergeGraph(TwoDGraph<double>* targetGraph, IndiceDiff* indiceDiff, int firstTarget, int secondTarget) {
-    // cout << "target 1 :" << firstTarget << ", target 2 : " << secondTarget << endl;
-    // cout << "==== before merge graph ====" << endl;
-    // for (int i = 0; i < targetGraph->n; i++) {
-    //     for (int j = 0; j < targetGraph->n; j++) {
-    //         cout << targetGraph->set[i][j] << "\t";
-    //     }
-    //     cout << endl;
-    // }
-
     int n = targetGraph->n;
     double** mergedSet = create2dArr<double>(n - 1, 0.0f);
     IndiceDiff* tempIndiceDiff = getIndiceDiffCopy(indiceDiff);
@@ -98,18 +97,11 @@ void mergeGraph(TwoDGraph<double>* targetGraph, IndiceDiff* indiceDiff, int firs
             }
         }
     }
+
     // update target Graph set
     free2dArr<double>(n, targetGraph->set);
     targetGraph->set = mergedSet;
     targetGraph->n = n - 1;
-
-    // cout << "==== after merge graph ====" << endl;
-    // for (int i = 0; i < targetGraph->n; i++) {
-    //     for (int j = 0; j < targetGraph->n; j++) {
-    //         cout << targetGraph->set[i][j] << "\t";
-    //     }
-    //     cout << endl;
-    // }
 
     // update indice history
     delete[] tempIndiceDiff->diffInfo;
@@ -134,20 +126,24 @@ bool AbsPpr::isIntegral(PprAns* ans) {
 
 void AbsPpr::initializeTightSet(PprAns* ans) {
     free2dArr<bool>(ans->n, ans->T);
-    delete[] ans->minsetA;
-    ans->minsetA = new bool[ans->n];
+    ans->T = create2dArr<bool>(ans->n, false);
     for (int i = 0; i < ans->n; i++) {
-        ans->minsetA[i] = true;
-    }
-    ans->T = create2dArr<bool>(ans->n, true);
-    for (int i = 0; i < ans->n; i++) {
-        ans->T[i][i] = false;
+        for (int j = 0; j < ans->n; j++) {
+            if (i != j) {
+            //if (i != j && !roughly_equal(0.0f, ans->sol[i][j])) {
+                ans->T[i][j] = true;
+                ans->T[j][i] = true;
+            }
+        }
     }
 }
 
 
 // s is nodes[-2], t is nodes[-1]
-TwoDGraph<double>* AbsPpr::getValidationGraph(PprAns* prevAns, EdgeInfo* firstEdge, EdgeInfo* secondEdge) {
+TwoDGraph<double>* AbsPpr::getValidationGraph(PprAns* prevAns) {
+    // cout << "==== make validationGraph ====" << endl;
+    // cout << ">>>> before built <<<<" << endl;
+    // printDouble2DArray(prevAns->n, prevAns->sol);
     int n = prevAns->n + 2;
     TwoDGraph<double>* validationGraph = new TwoDGraph<double>;
     validationGraph->n = n;
@@ -178,8 +174,15 @@ TwoDGraph<double>* AbsPpr::getValidationGraph(PprAns* prevAns, EdgeInfo* firstEd
             validationGraph->set[i][n - 1] = 1.0f;
         }
     }
-
+    // cout << ">>>> after built <<<<" << endl;
+    // printDouble2DArray(validationGraph->n, validationGraph->set);
+    // cout << endl;
     return validationGraph;
+}
+
+bool isDuplicate(int firsti, int firstj, int secondi, int secondj) {
+    return (firsti == secondi && firstj == secondj) ||
+            (firstj == secondi && firsti == secondj);
 }
 
 EdgeInfo* AbsPpr::pullEdge(PprAns* ans) {
@@ -190,14 +193,36 @@ EdgeInfo* AbsPpr::pullEdge(PprAns* ans) {
 
     for (int i = 0; i < ans->n; i++) {
         for (int j = 0; j < ans->n; j++) {
-            if (i != j && ans->T[i][j] && ans->T[j][i]
-                && !roughly_equal(static_cast<int>(ans->sol[i][j]), ans->sol[i][j])) { // TODO : is this correct?
+            if (i != j &&
+                ans->T[i][j] &&
+                ans->T[j][i] &&
+                !roughly_equal(static_cast<int>(ans->sol[i][j]), ans->sol[i][j])) { // TODO : is this correct?
                 edge->source = i;
                 edge->sink = j;
                 edge->weight = ans->sol[i][j];
-                // mark T
-                ans->T[i][j] = false;
-                ans->T[j][i] = false;
+                return edge;
+            }
+        }
+    }
+    return edge;
+}
+
+EdgeInfo* AbsPpr::pullEdge(PprAns* ans, EdgeInfo* noDupEdge) {
+    EdgeInfo* edge = new EdgeInfo;
+    edge->source = -1;
+    edge->sink = -1;
+    edge->weight = -1;
+
+    for (int i = 0; i < ans->n; i++) {
+        for (int j = 0; j < ans->n; j++) {
+            if (i != j &&
+                ans->T[i][j] &&
+                ans->T[j][i] &&
+                !roughly_equal(static_cast<int>(ans->sol[i][j]), ans->sol[i][j]) &&
+                !isDuplicate(noDupEdge->source, noDupEdge->sink, i, j)) { // TODO : is this correct?
+                edge->source = i;
+                edge->sink = j;
+                edge->weight = ans->sol[i][j];
                 return edge;
             }
         }
@@ -206,7 +231,7 @@ EdgeInfo* AbsPpr::pullEdge(PprAns* ans) {
 }
 
 bool* AbsPpr::getMinsetA(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
-    TwoDGraph<double>* validationGraph = getValidationGraph(prevAns, i, j);
+    TwoDGraph<double>* validationGraph = getValidationGraph(prevAns);
     MinCutInfo mci;
     
     IndiceDiff* indiceDiff = new IndiceDiff;
@@ -339,18 +364,19 @@ PprAns* AbsPpr::hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
     PprAns* newAns = new PprAns;
     newAns->n = prevAns->n;
     // 1. build newAns->minsetA newAns->T
-    newAns->minsetA = getMinsetA(prevAns, i, j);
+    bool* minsetA = getMinsetA(prevAns, i, j);
     // get T from minset
     newAns->T = create2dArr<bool>(prevAns->n, false);
     for (int i = 0; i < prevAns->n; i++) {
-        for (int j = 0; j < prevAns->n; j++) {
-            if (newAns->minsetA[i] && newAns->minsetA[j] && i != j) {
+        for (int j = i; j < prevAns->n; j++) {
+            if (minsetA[i] && minsetA[j] && i != j) {
                 newAns->T[i][j] = true;
+                newAns->T[j][i] = true;
             }
         }
     }
     // 2. build newAns->delta
-    newAns->delta = getConstraintDelta(newAns->minsetA, prevAns);
+    newAns->delta = getConstraintDelta(minsetA, prevAns);
     if (newAns->delta < 0.0f) {
         throw runtime_error("constraintDelta is smaller than 0, something's wrong! Terminate.");
     }
@@ -358,18 +384,11 @@ PprAns* AbsPpr::hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
     if (prevAns->sol[j->source][j->sink] < newAns->delta) {
         //cout << "==== meet lower bound! ====" << endl;        
         free2dArr<bool>(prevAns->n, newAns->T);
-        delete[] newAns->minsetA;
-        newAns->minsetA = createArr(prevAns->n, false);
         newAns->T = create2dArr<bool>(prevAns->n, false);
         newAns->delta = prevAns->sol[j->source][j->sink];
 
-        // newAns->minsetA[j->source] = true;
-        // newAns->minsetA[j->sink] = true;
-        // newAns->T[j->source][j->sink] = true;
-        // newAns->T[j->sink][j->source] = true;
-        // if (prevAns->sol[i->source][i->sink] + newAns->delta > 1.0f) {
-        //     newAns->delta = 1.0f - prevAns->sol[i->source][i->sink];
-        // }
+        newAns->T[j->source][j->sink] = true;
+        newAns->T[j->sink][j->source] = true;
     }    
     // 3. build newAns->sol
     newAns->sol = new double*[newAns->n];
@@ -391,30 +410,18 @@ PprAns* AbsPpr::hitConstraint(PprAns* prevAns, EdgeInfo* i, EdgeInfo* j) {
 
 void AbsPpr::pipageRound(PprAns* targetAns) {
     while (!isIntegral(targetAns)) {
-        //printPprAns(targetAns);
         initializeTightSet(targetAns);
         while (true) {
             EdgeInfo* i = pullEdge(targetAns);
-            EdgeInfo* j = pullEdge(targetAns);
+            EdgeInfo* j = pullEdge(targetAns, i);
             // invalid edge
             if (i->source < 0 || j->source < 0) {
                 //cout << "invalid edge. break" << endl;
                 break;
             }
-            
             PprAns* incAns = hitConstraint(targetAns, i, j);
-            cout << "==== inc ans ====" << endl;
-            printPprAns(incAns);
-            cout << endl;
             PprAns* decAns = hitConstraint(targetAns, j, i);
-            cout << "==== dec ans ====" << endl;
-            printPprAns(decAns);
-            cout << endl;
             updateSol(targetAns, incAns, decAns);
-            //cout  << "==== final Ans ====" << endl;
-            printPprAns(targetAns);
-            cout << endl;
-            cin.ignore();
         }
     }
     printPprAns(targetAns);

@@ -106,11 +106,6 @@ int main() {
      for (int i = 0; i < targetAns->n; i++) {
         targetAns->sol[i][i] = 0.0f;
     }
-
-    targetAns->minsetA = new bool[targetAns->n];
-    for (int i = 0; i < targetAns->n; i++) {
-        targetAns->minsetA[i] = true;
-    }
     targetAns->T = create2dArr<bool>(targetAns->n, true);
 
     RandomizedPpr rppr = RandomizedPpr();
