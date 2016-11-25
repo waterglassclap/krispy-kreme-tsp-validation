@@ -139,79 +139,34 @@ Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp
 .PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/common_util.s
 
 # target to build an object file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.o:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.o
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.o
+Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.o:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.o
+.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.o
 
 # target to preprocess a source file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.i:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.i
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.i
+Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.i:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.i
+.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.i
 
 # target to generate assembly for a file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.s:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.s
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.s
+Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.s:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.s
+.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.s
 
 # target to build an object file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.o:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.o
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.o
+Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.o:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.o
+.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.o
 
 # target to preprocess a source file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.i:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.i
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.i
+Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.i:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.i
+.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.i
 
 # target to generate assembly for a file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.s:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.s
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.s
-
-# target to build an object file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.o:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.o
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.o
-
-# target to preprocess a source file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.i:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.i
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.i
-
-# target to generate assembly for a file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.s:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.s
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.s
-
-# target to build an object file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.o:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.o
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.o
-
-# target to preprocess a source file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.i:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.i
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.i
-
-# target to generate assembly for a file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.s:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.s
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.s
-
-# target to build an object file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.o:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.o
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.o
-
-# target to preprocess a source file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.i:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.i
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.i
-
-# target to generate assembly for a file
-Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.s:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.s
-.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.s
+Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.s:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.s
+.PHONY : Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.s
 
 # target to build an object file
 abs_ppr.o:
@@ -244,19 +199,19 @@ randomized_ppr.s:
 .PHONY : randomized_ppr.s
 
 # target to build an object file
-sample.o:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample.o
-.PHONY : sample.o
+sample_testall.o:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample_testall.o
+.PHONY : sample_testall.o
 
 # target to preprocess a source file
-sample.i:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample.i
-.PHONY : sample.i
+sample_testall.i:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample_testall.i
+.PHONY : sample_testall.i
 
 # target to generate assembly for a file
-sample.s:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample.s
-.PHONY : sample.s
+sample_testall.s:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample_testall.s
+.PHONY : sample_testall.s
 
 # Help Target
 help:
@@ -270,30 +225,21 @@ help:
 	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/common_util.o"
 	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/common_util.i"
 	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/common_util.s"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.o"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.i"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/graph.s"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.o"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.i"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/helper.s"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.o"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.i"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mincut_util.s"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.o"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.i"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/mouse_draw.s"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.o"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.i"
-	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/max-flow-min-cut-graph-cut/src/sample.s"
+	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.o"
+	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.i"
+	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/mincut_util.s"
+	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.o"
+	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.i"
+	@echo "... Users/sookyungpark/Documents/yonsei_new/4-2/software_capstone_2/krispy-kreme-tsp-validation/common/utils/push_relabel.s"
 	@echo "... abs_ppr.o"
 	@echo "... abs_ppr.i"
 	@echo "... abs_ppr.s"
 	@echo "... randomized_ppr.o"
 	@echo "... randomized_ppr.i"
 	@echo "... randomized_ppr.s"
-	@echo "... sample.o"
-	@echo "... sample.i"
-	@echo "... sample.s"
+	@echo "... sample_testall.o"
+	@echo "... sample_testall.i"
+	@echo "... sample_testall.s"
 .PHONY : help
 
 

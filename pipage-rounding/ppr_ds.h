@@ -3,9 +3,8 @@
 
 typedef struct PprAns {
     int n;
-    float delta;
-    float** sol;
-    bool* minsetA;
+    double delta;
+    double** sol;
     bool** T;
 } PprAns;
 

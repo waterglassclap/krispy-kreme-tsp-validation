@@ -3,18 +3,26 @@
 
 #include <iostream>
 
-const float ERROR_TOLERANCE = 1e-9;
+const double ERROR_TOLERANCE = 1e-9;
 
-bool over(float value, float boundary);
-bool exceed(float value, float boundary);
-bool roughly_equal(float value, float boundary);
+bool over(double value, double boundary);
+bool exceed(double value, double boundary);
 // merged node will be 0
-float** getMergedGraph(int s, int t, int n, float** inputGraph);
+bool roughly_equal(double value, double boundary);
+double** getMergedGraph(int s, int t, int n, double** inputGraph);
 template <typename T> void free2dArr(int n, T** inputGraph) {
 	for (int i = 0; i < n; i++) {
 		delete inputGraph[i];
 	}
 	delete[] inputGraph;
+}
+
+template <typename T> T* createArr(int n, T initValue) {
+	T* arr = new T[n];
+	for (int i = 0; i < n; i++) {
+		arr[i] = initValue;
+	}
+	return arr;
 }
 template <typename T> T** create2dArr(int n, T initValue) {
 	T** arr = new T*[n];

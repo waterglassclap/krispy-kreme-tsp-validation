@@ -4,7 +4,7 @@ MincutUtil::MincutUtil() {
     // Do nothing
 }
 
-MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, float** inputGraph) {
+MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, double** inputGraph) {
     Graph g;
     // get min cut
     for(int i = 0; i < n; i++){
@@ -28,7 +28,7 @@ MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, float** inputGraph) {
     for (int i = 0; i < n; i++) {
         minCutInfo.heights[i] = getHeight(g, i);
     }
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < minCutInfo.heights[s]; i++) {
         bool isPresent = false;
         for (int j = 0; j < n; j++) {
             if (minCutInfo.heights[j] == i) {
@@ -61,7 +61,7 @@ MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, float** inputGraph) {
     return minCutInfo;
 }
 
-ErrorInfo MincutUtil::getStErrorInfo(int s, int t, int n, float** inputGraph) {
+ErrorInfo MincutUtil::getStErrorInfo(int s, int t, int n, double** inputGraph) {
     ErrorInfo errorInfo;
     errorInfo.isValid = false;
 
@@ -77,7 +77,7 @@ ErrorInfo MincutUtil::getStErrorInfo(int s, int t, int n, float** inputGraph) {
     return errorInfo;
 }
 
-struct ErrorInfos MincutUtil::getNonStErrorInfos(int s, int t, int n, float** inputGraph) {
+struct ErrorInfos MincutUtil::getNonStErrorInfos(int s, int t, int n, double** inputGraph) {
     ErrorInfos errorInfos;
     errorInfos.infos = new ErrorInfo[n];
     errorInfos.num = 0;
@@ -86,7 +86,7 @@ struct ErrorInfos MincutUtil::getNonStErrorInfos(int s, int t, int n, float** in
         throw runtime_error("s should not be equal to t. terminate.");
     }
 
-    float** mergedGraph = getMergedGraph(s, t, n, inputGraph);
+    double** mergedGraph = getMergedGraph(s, t, n, inputGraph);
 
     for (int i = 0; i < n - 1; i++) {
         if (i != s) {
