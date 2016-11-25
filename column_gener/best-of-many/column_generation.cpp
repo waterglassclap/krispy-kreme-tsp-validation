@@ -1,7 +1,8 @@
 #include "column_generation.h"
 
-bool** column_generation(int n, double** cost, double** x) {
-    bool** spanningTree;
+vector<bool**> column_generation(int n, double** cost, double** x) {
+    vector<bool**> spanningTrees;
+    vector<bool**> returnTrees;
     IloEnv env;
     
     try {
@@ -58,7 +59,6 @@ bool** column_generation(int n, double** cost, double** x) {
         cplex.setParam(IloCplex::RootAlg, IloCplex::Primal);
         
         int iter = 0; // for debug
-        vector<bool**> spanningTrees;
         
         while(1) {
             // Export model to file
@@ -112,11 +112,10 @@ bool** column_generation(int n, double** cost, double** x) {
             iter++;
         }
         
-        double probability = 0;
         for (int i=0; i<iter; i++) {
-            if(cplex.getValue(y[i]) > probability) {
-                probability = cplex.getValue(y[i]);
-                spanningTree = spanningTrees[i];
+            if(cplex.getValue(y[i]) > 0) {
+                cout << "probability: " << cplex.getValue(y[i]) << endl;
+                returnTrees.push_back(spanningTrees[i]);
             }
         }
         
@@ -128,7 +127,7 @@ bool** column_generation(int n, double** cost, double** x) {
     
     env.end();
     
-    return spanningTree;
+    return returnTrees;
 }
 
 double getMST(double** graph, bool** maxSpan, int n) {

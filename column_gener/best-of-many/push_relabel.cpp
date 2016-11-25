@@ -152,4 +152,8 @@ void Graph::freeGraph() {
     free(list);
     free(seen);
     free(excess);
+    
+    for( int i = 0 ; i < NODES ; i++ )
+        delete [] F[i] ;
+    delete [] F ;
 }

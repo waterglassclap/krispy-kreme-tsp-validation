@@ -12,18 +12,26 @@ double** held_karp_lp(int n, double** cost);
 bool check_validation(const IloEnv& env, const IloCplex& cplex, const IloModel& model, const IloArray<IloNumVarArray>& x, std::stringstream& name, int n);
 void stDivider(int s, int t, MinCutInfo* mergedInfo);
 bool isSpanningTree(bool** tree, int n);
+void printSpanningTree(bool** spanningTree, double** cost, int n, int iter, const char* filename);
 
-const int start_node = 3, end_node = 5;
+int start_node, end_node;
 
 int main (int argc, char **argv) {
-    const char* filename  = "/Users/ttopre/Downloads/bier127.txt";
+    cout << "Held-Karp Relaxation and Column Generation" << endl;
+    
+    const char* filename  = argv[1];
     ifstream file(filename);
     if (!file) {
-        cerr << "ERROR: could not open file '" << filename
+        cout << "ERROR: could not open file '" << filename
         << "' for reading" << endl;
-        cerr << "usage:   " << argv[0] << " <file>" << endl;
+        cout << "USAGE:   " << argv[0] << " <filename>" << endl;
         throw(-1);
     }
+    
+    cout << "start node: ";
+    cin >> start_node;
+    cout << "end node: ";
+    cin >> end_node;
     
     int node_num, edge_num;
     file >> node_num >> edge_num;
@@ -38,6 +46,8 @@ int main (int argc, char **argv) {
         full_weight_matrix[temp_i][temp_j] = temp_w;
     }
     
+    file.close();
+    
     double** held_karp_optimal = held_karp_lp(node_num, full_weight_matrix);
     
     if(held_karp_optimal == 0) {
@@ -45,43 +55,34 @@ int main (int argc, char **argv) {
         return 0;
     }
     
-    ofstream out_file("/Users/ttopre/Downloads/psk/a.txt");
+    stringstream held_karp_file;
+    held_karp_file << "/Users/ttopre/Desktop/held_karp_optimal/" << start_node << "_" << end_node << "_" << filename;
+    ofstream out_held_karp(held_karp_file.str().c_str());
+    
     int n = node_num;
-    out_file << n << endl;
-    out_file << start_node << " " << end_node << endl;
+    out_held_karp << n << endl;
+    out_held_karp << start_node << " " << end_node << endl;
     for(int i = 0; i < n; ++i) {
         for(int j = 0; j < n; ++j) {
             if(i > j) {
                 if(held_karp_optimal[i][j] > 1e-10) {
-                    out_file << i << " " << j << " " << held_karp_optimal[j][i] << endl;
-                    cout << "held_karp_optimal[" << i << "][" << j << "] = " << held_karp_optimal[j][i] << ";" << endl;
+                    out_held_karp << i << " " << j << " " << held_karp_optimal[j][i] << endl;
                 }
             } else {
                 if(held_karp_optimal[i][j] > 1e-10) {
-                    out_file << i << " " << j << " " << held_karp_optimal[i][j] << endl;
-                    cout << "held_karp_optimal[" << i << "][" << j << "] = " << held_karp_optimal[i][j] << ";" << endl;
+                    out_held_karp << i << " " << j << " " << held_karp_optimal[i][j] << endl;
                 }
             }
         }
     }
-    //////////////////
     
-    cout << "츄카해";
+    out_held_karp.close();
     
-    bool** spanningTree = column_generation(node_num, full_weight_matrix, held_karp_optimal);
+    cout << endl << "Column Generation Start" << endl;
+    vector<bool**> spanningTrees = column_generation(node_num, full_weight_matrix, held_karp_optimal);
     
-    if(isSpanningTree(spanningTree, node_num)) {
-        cout << " spanning tree" << endl;
-    } else {
-        cout << " not spanning" << endl;
-    }
-    
-    for (int i=0; i<n; i++) {
-        for (int j=i+1; j<n; j++) {
-            if(spanningTree[i][j]) {
-                cout << i << "-" << j << ": " << spanningTree[i][j] << endl;
-            }
-        }
+    for(int i=0; i<spanningTrees.size(); i++) {
+        printSpanningTree(spanningTrees[i], full_weight_matrix, node_num, i, filename);
     }
     
     return 0;
@@ -224,7 +225,7 @@ bool check_validation(const IloEnv& env, const IloCplex& cplex, const IloModel& 
     }
     
     if(maxErrorInfo.severity == -1) {
-        cout << "there is no StErrorInfos" << endl;
+        // cout << "there is no StErrorInfos" << endl;
         return false;
     }
     
@@ -232,9 +233,6 @@ bool check_validation(const IloEnv& env, const IloCplex& cplex, const IloModel& 
         // restore merged graph when nonSTError
         stDivider(start_node, end_node, &maxErrorInfo.minCutInfo);
     }
-    
-    cout << "maxError mincut size info" << endl;
-    cout << "serverity: " << maxErrorInfo.severity << endl << "minCutSize: " << maxErrorInfo.minCutInfo.size << endl << "totalFlow: " << maxErrorInfo.minCutInfo.totalFlow << endl;
     
     // Subtour Elimination Constraints
     IloRangeArray subtour_constraints(env);
@@ -346,4 +344,29 @@ bool isSpanningTree(bool** tree, int n) {
         return true;
     }
     return false;
+}
+
+void printSpanningTree(bool** spanningTree, double** cost, int n, int iter, const char* filename) {
+    if(isSpanningTree(spanningTree, n)) {
+        cout << iter << "th is spanning tree" << endl;
+    } else {
+        cout << iter << "th is not spanning" << endl;
+        return;
+    }
+    
+    stringstream col_generation_file;
+    col_generation_file << "/Users/ttopre/Desktop/column_generation/" << start_node << "_" << end_node << "_" << iter << "_" << filename;
+    ofstream out_col_generation(col_generation_file.str().c_str());
+    
+    out_col_generation << n << " " << n-1 << endl;
+    
+    for (int i=0; i<n; i++) {
+        for (int j=i+1; j<n; j++) {
+            if(spanningTree[i][j]) {
+                out_col_generation << i << " " << j << " " << cost[i][j] << endl;
+            }
+        }
+    }
+
+    out_col_generation.close();
 }
