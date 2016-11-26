@@ -8,8 +8,14 @@
 
 using namespace std;
 
+typedef struct FullyConnInfo {
+    int n;
+    int** set;
+} FullyConnInfo;
+
 int targetIteration = 500;
 
+string FULL_DATA_DIR = "../datas/tsp-full/";
 
 PprAns* readInputFromFile(string inputFilename) {
     int s, t, a, b;
@@ -34,26 +40,62 @@ PprAns* readInputFromFile(string inputFilename) {
     return targetAns;
 }
 
-void writePprAnsToFile(PprAns* targetAns, string outputFilename) {
+void writePprAnsToFile(PprAns* targetAns, string outputFilename, FullyConnInfo fullyConnInfo) {
     ofstream outfile(outputFilename);
 
+    outfile << targetAns->n << " " << targetAns->n - 1;
     for (int i = 0; i < targetAns->n; i++) {
-        for (int j = 0; j <targetAns->n; j++) {
+        for (int j = i; j <targetAns->n; j++) {
             if (targetAns->sol[i][j] > 0.0f) {
-            outfile << i << " " << j << " " << targetAns->sol[i][j] << endl;
+            //outfile << endl << i << " " << j << " " << targetAns->sol[i][j];
+            outfile << endl << i << " " << j << " " << fullyConnInfo.set[i][j];
             }
         }
     }
-
     outfile.close();
 }
 
-// TODO : to more random seed! not time..?
+FullyConnInfo getFullyConnInfo(string fullDataFilename) {
+    int nodeNum, edgeNum;
+    int a, b, w;
+    FullyConnInfo fullyConnInfo;
+    ifstream infile(fullDataFilename.c_str());
+    infile >> nodeNum >> edgeNum;
+
+    fullyConnInfo.n = nodeNum;
+    fullyConnInfo.set = create2dArr<int>(nodeNum, 0);
+    while (infile >> a >> b >> w) {
+        fullyConnInfo.set[a][b] = w;
+    }
+    infile.close();
+
+    return fullyConnInfo;
+}
+
+void runPipageMultiple(string inputFilepath, string inputFilename, string outputDirname) {
+    string fullDataFilename = FULL_DATA_DIR + inputFilename;
+    FullyConnInfo fullyConnInfo = getFullyConnInfo(fullDataFilename);
+
+    cout << ">>>> run pipage for file : " << inputFilename << "<<<<" << endl;
+    for (unsigned int j = 0; j < targetIteration; j++) {
+        cout << "iteration " << j << "..." << endl;
+        PprAns* targetAns = readInputFromFile(inputFilepath);
+        RandomizedPpr rppr = RandomizedPpr();
+        rppr.pipageRound(targetAns);
+        string outputFilename = outputDirname + "/" + to_string(j) + ".txt";
+        writePprAnsToFile(targetAns, outputFilename, fullyConnInfo);
+    }
+}
+
 int main() {
     srand(time(NULL));
-    
+
+    string inputDirname = "inputs";
+    string outputRootDirname = "outputs";
+
+    // get input file list from dir
     glob_t inputList;
-    glob("inputs/*", GLOB_TILDE, NULL, &inputList);
+    glob((inputDirname + "/*").c_str(), GLOB_TILDE, NULL, &inputList);
     regex pathRe("(.*/)(.*)\\.txt");
     smatch m;
     string str;
@@ -63,19 +105,16 @@ int main() {
         str = inputList.gl_pathv[i];
         regex_search (str, m, pathRe);
         string inputFilename = m[m.size() - 1].str();
-        string outputDirname = "outputs/" + inputFilename;
+        string outputDirname = outputRootDirname + "/" + inputFilename;
+
         // make dir for output
         mkdir(outputDirname.c_str(), S_IRWXU);
-        
-        cout << ">>>> run pipage for file : " << inputFilename << "<<<<" << endl;
-        for (unsigned int j = 0; j < targetIteration; j++) {
-            cout << "iteration " << j << "..." << endl;
-            PprAns* targetAns = readInputFromFile(m[0].str());
-            RandomizedPpr rppr = RandomizedPpr();
-            rppr.pipageRound(targetAns);
-            string outputFilename = outputDirname + "/" + to_string(j) + ".txt";
-            writePprAnsToFile(targetAns, outputFilename);
-        }
+
+        runPipageMultiple(m[0].str(), inputFilename, outputDirname);
+
+        //cout << "Press Enter to Continue ....";
+        //cin.ignore();
+
     }
     return 0;
 }
