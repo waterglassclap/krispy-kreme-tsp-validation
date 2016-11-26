@@ -73,12 +73,11 @@ FullyConnInfo getFullyConnInfo(string fullDataFilename) {
 }
 
 void runPipageMultiple(string inputFilepath, string inputFilename, string outputDirname) {
-    string fullDataFilename = FULL_DATA_DIR + inputFilename;
+    string fullDataFilename = FULL_DATA_DIR + "rat195.txt";
     FullyConnInfo fullyConnInfo = getFullyConnInfo(fullDataFilename);
 
     cout << ">>>> run pipage for file : " << inputFilename << "<<<<" << endl;
     for (unsigned int j = 0; j < targetIteration; j++) {
-        cout << "iteration " << j << "..." << endl;
         PprAns* targetAns = readInputFromFile(inputFilepath);
         RandomizedPpr rppr = RandomizedPpr();
         rppr.pipageRound(targetAns);

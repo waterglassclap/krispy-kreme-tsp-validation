@@ -199,19 +199,19 @@ randomized_ppr.s:
 .PHONY : randomized_ppr.s
 
 # target to build an object file
-sample2.o:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample2.o
-.PHONY : sample2.o
+sample_testall.o:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample_testall.o
+.PHONY : sample_testall.o
 
 # target to preprocess a source file
-sample2.i:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample2.i
-.PHONY : sample2.i
+sample_testall.i:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample_testall.i
+.PHONY : sample_testall.i
 
 # target to generate assembly for a file
-sample2.s:
-	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample2.s
-.PHONY : sample2.s
+sample_testall.s:
+	$(MAKE) -f CMakeFiles/rand_ppr.dir/build.make CMakeFiles/rand_ppr.dir/sample_testall.s
+.PHONY : sample_testall.s
 
 # Help Target
 help:
@@ -237,9 +237,9 @@ help:
 	@echo "... randomized_ppr.o"
 	@echo "... randomized_ppr.i"
 	@echo "... randomized_ppr.s"
-	@echo "... sample2.o"
-	@echo "... sample2.i"
-	@echo "... sample2.s"
+	@echo "... sample_testall.o"
+	@echo "... sample_testall.i"
+	@echo "... sample_testall.s"
 .PHONY : help
 
 
