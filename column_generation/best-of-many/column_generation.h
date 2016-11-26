@@ -10,7 +10,7 @@
 using namespace std;
 
 // column_generation
-bool** column_generation(int n, double** cost, double** x);
+vector<bool**> column_generation(int n, double** cost, double** x);
 double getMST(double** graph, bool** maxSpan, int n);
 
 #endif /* column_generation_h */

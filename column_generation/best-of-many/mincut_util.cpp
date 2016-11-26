@@ -10,7 +10,6 @@ MinCutInfo MincutUtil::getMinCutInfo(int s, int t, int n, double** inputGraph) {
     
     double max_flow = g.pushRelabel();
     vector<EdgeInfo> min_cut = g.getMinCut(s);
-    cout << "ST: " << s << " " << t << " / max: " << max_flow << " / mincut: " << min_cut.size() << endl;
     
     // build mincut info
     MinCutInfo minCutInfo;
